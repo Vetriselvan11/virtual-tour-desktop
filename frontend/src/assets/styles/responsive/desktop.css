@@ -1,0 +1,5 @@
+/* === WoX BUILDER Desktop CSS Layout Override Rules === */
+
+@media (min-width: 1024px) {
+  /* Default desktop properties are already declared globally. */
+}

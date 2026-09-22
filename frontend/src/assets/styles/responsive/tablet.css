@@ -1,0 +1,21 @@
+/* === WoX BUILDER Tablet CSS Layout Override Rules === */
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  :root {
+    --panel-left-width: 180px;
+    --panel-right-width: 240px;
+    --topbar-height: 52px;
+  }
+
+  /* Two-column responsiveness for dashboard cards */
+  .ant-col-xs-24.ant-col-sm-12.ant-col-lg-8 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+
+  /* Compact button and panel styling for intermediate viewports */
+  .ant-btn-sm {
+    padding: 2px 8px;
+    font-size: 11px !important;
+  }
+}

@@ -1,0 +1,99 @@
+/* === WoX BUILDER Mobile CSS Override Layout Rules === */
+
+/* Critical: Fix 100vh bug on iOS Safari (URL bar overlap) */
+:root {
+  --app-height: 100vh;
+}
+
+html, body {
+  overscroll-behavior: none;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --app-height: 100svh;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* Dynamic font scaling */
+  :root {
+    --panel-left-width: 0px;
+    --panel-right-width: 0px;
+    --topbar-height: 48px;
+    --timeline-height: 80px;
+  }
+
+  body {
+    font-size: 13px;
+  }
+
+  /* Responsive grid elements */
+  .ant-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .ant-col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Scale buttons and touch zones for accessibility */
+  button, 
+  .ant-btn {
+    height: auto !important;
+    padding: 8px 12px;
+    font-size: 12px !important;
+  }
+
+  /* Minimum tap target size (WCAG 2.5.5) */
+  button {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  /* Specific mobile-first scrollbar behaviors */
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  /* Layout tweaks for public viewer overlays */
+  .viewer-controls-overlay {
+    bottom: 12px !important;
+    right: 12px !important;
+  }
+
+  .viewer-header-overlay {
+    padding: 12px 16px !important;
+  }
+
+  .viewer-header-overlay h1 {
+    font-size: 16px !important;
+  }
+  
+  /* Timeline thumbnail selector adjustments */
+  .viewer-gallery-slider {
+    bottom: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+    padding: 8px 10px !important;
+  }
+
+  /* Context Menu scaling */
+  .context-menu-wrapper {
+    width: 160px !important;
+  }
+
+  /* Modal responsive sizing */
+  .ant-modal {
+    max-width: calc(100vw - 20px) !important;
+    margin: 10px auto !important;
+  }
+  
+  .ant-modal-body {
+    padding: 16px 12px !important;
+  }
+}
