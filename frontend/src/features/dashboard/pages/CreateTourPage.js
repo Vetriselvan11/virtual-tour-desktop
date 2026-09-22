@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, Form, Input, Button, message, Space } from 'antd';
 import Icon from '../../../components/common/Icon';
+import ActionLoader from '../../../components/common/ActionLoader';
 import { useNavigate } from 'react-router-dom';
 import { createTour } from '../services/tour.service';
 
@@ -19,13 +20,13 @@ export default function CreateTourPage() {
       setTimeout(() => navigate(`/editor/${tour.id}`), 600);
     } catch (err) {
       message.error('Failed to create tour');
-    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ animation: 'fadeIn 0.4s ease', maxWidth: 600 }}>
+    <div style={{ animation: 'fadeIn 0.4s ease', maxWidth: 600, position: 'relative' }}>
+      {loading && <ActionLoader text="Creating virtual tour..." />}
       <Button
         icon={<Icon name="ArrowLeft" />}
         onClick={() => navigate('/dashboard/tours')}

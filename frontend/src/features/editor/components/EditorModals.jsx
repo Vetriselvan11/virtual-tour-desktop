@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'antd';
 import SceneConnectionModal from '../../../core/editor/interaction/SceneConnectionModal';
 import Icon from '../../../components/common/Icon';
+import ActionLoader from '../../../components/common/ActionLoader';
 
 export function EditorModals({
   tour,
@@ -34,25 +35,10 @@ export function EditorModals({
         footer={null}
         closable={false}
         centered
-        styles={{ body: { padding: '24px 16px', textAlign: 'center' } }}
+        styles={{ body: { padding: '24px 16px', textAlign: 'center', height: '250px', position: 'relative' } }}
       >
         <div style={{ margin: '10px 0 20px' }}>
-          <div style={{ marginBottom: 16, animation: 'pulse 1.5s infinite', color: 'var(--accent)', display: 'flex', justifyContent: 'center' }}>
-            <Icon name="FaFolderOpen" size={48} />
-          </div>
-          <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Uploading panorama images and generating rooms...
-          </div>
-          <div style={{
-            width: '100%', height: 8, background: 'var(--bg-tertiary)', borderRadius: 4, overflow: 'hidden', position: 'relative', border: '1px solid var(--border)', marginBottom: 12
-          }}>
-            <div style={{
-              width: `${folderUploadProgress}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent), var(--green))', transition: 'width 0.15s ease', boxShadow: '0 0 8px var(--accent-glow)'
-            }} />
-          </div>
-          <div style={{ fontFamily: 'monospace', fontSize: 14, fontWeight: 700, color: 'var(--green)' }}>
-            {folderUploadProgress}% Completed
-          </div>
+          <ActionLoader text={`Uploading panorama images... ${folderUploadProgress}%`} />
         </div>
       </Modal>
 
@@ -62,25 +48,10 @@ export function EditorModals({
         footer={null}
         closable={false}
         centered
-        styles={{ body: { padding: '24px 16px', textAlign: 'center' } }}
+        styles={{ body: { padding: '24px 16px', textAlign: 'center', height: '250px', position: 'relative' } }}
       >
         <div style={{ margin: '10px 0 20px' }}>
-          <div style={{ marginBottom: 16, animation: 'pulse 1.5s infinite', color: 'var(--cyan)', display: 'flex', justifyContent: 'center' }}>
-            <Icon name="FaBoxOpen" size={48} />
-          </div>
-          <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            {exportProgress < 100 ? 'Packaging assets and offline player...' : 'Compiling zip archive...'}
-          </div>
-          <div style={{
-            width: '100%', height: 8, background: 'var(--bg-tertiary)', borderRadius: 4, overflow: 'hidden', position: 'relative', border: '1px solid var(--border)', marginBottom: 12
-          }}>
-            <div style={{
-              width: `${exportProgress}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent), var(--cyan))', transition: 'width 0.15s ease', boxShadow: '0 0 8px var(--accent-glow)'
-            }} />
-          </div>
-          <div style={{ fontFamily: 'monospace', fontSize: 14, fontWeight: 700, color: 'var(--cyan)' }}>
-            {exportProgress}% Completed
-          </div>
+          <ActionLoader text={`Packaging offline player... ${exportProgress}%`} />
         </div>
       </Modal>
     </>

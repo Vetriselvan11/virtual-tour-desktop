@@ -4,6 +4,7 @@ import {
   Popconfirm, Spin, message, Modal, Select
 } from 'antd';
 import Icon from '../../../components/common/Icon';
+import ActionLoader from '../../../components/common/ActionLoader';
 import { useNavigate } from 'react-router-dom';
 import { getTours, deleteTour, exportTourZip } from '../services/tour.service';
 import { useResponsiveContext } from '../../../context/ResponsiveProvider';
@@ -277,26 +278,10 @@ export default function ToursPage() {
         closable={false}
         centered
         className="glass-modal"
-        styles={{ body: { padding: '24px 16px', textAlign: 'center' } }}
+        styles={{ body: { padding: '24px 16px', textAlign: 'center', height: '250px', position: 'relative' } }}
       >
         <div style={{ margin: '10px 0 20px' }}>
-          <div style={{ fontSize: 44, marginBottom: 16, animation: 'pulse 1.5s infinite' }}>📦</div>
-          <div style={{ fontSize: 14, color: 'var(--text-muted)', marginBottom: 4 }}>
-            Exporting: <strong style={{ color: 'var(--text-main)' }}>{exportingTitle}</strong>
-          </div>
-          <div style={{ fontSize: 13, color: 'var(--text-soft)', marginBottom: 16 }}>
-            {exportProgress < 100 ? 'Packaging assets and offline player...' : 'Compiling zip archive...'}
-          </div>
-          <div style={{
-            width: '100%', height: 6, background: 'rgba(24, 26, 23, 0.8)', borderRadius: 3, overflow: 'hidden', border: '1px solid var(--border-soft)', marginBottom: 12
-          }}>
-            <div style={{
-              width: `${exportProgress}%`, height: '100%', background: 'var(--primary)', transition: 'width 0.2s ease'
-            }} />
-          </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: 'var(--primary)' }}>
-            {exportProgress}% Completed
-          </div>
+          <ActionLoader text={`Packaging ${exportingTitle || 'offline player'}... ${exportProgress}%`} />
         </div>
       </Modal>
 

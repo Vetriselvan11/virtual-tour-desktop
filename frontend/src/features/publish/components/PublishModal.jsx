@@ -4,6 +4,7 @@ import {
   Progress, message, Popconfirm, Spin, Tooltip
 } from 'antd';
 import Icon from '../../../components/common/Icon';
+import ActionLoader from '../../../components/common/ActionLoader';
 import {
   validateTourForPublish,
   publishTour,
@@ -338,12 +339,7 @@ export default function PublishModal({
 
                     {/* Progress Bar (Visible during publish) */}
                     {publishing && (
-                      <div style={{ marginBottom: 20, textAlign: 'center' }}>
-                        <div style={{ fontSize: 13, color: 'var(--text-main)', marginBottom: 6, fontWeight: 600 }}>
-                          {publishStage}
-                        </div>
-                        <Progress percent={publishProgress} strokeColor="var(--primary)" status="active" />
-                      </div>
+                      <ActionLoader text={publishStage || 'Publishing Tour...'} />
                     )}
 
                     {/* Action Buttons */}
