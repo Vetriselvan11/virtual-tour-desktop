@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Slider } from 'antd';
+import { Form, Slider, Select } from 'antd';
 import { labelStyle } from './hotspotConstants';
 
 export default function HotspotLayoutSection({
@@ -15,18 +15,37 @@ export default function HotspotLayoutSection({
           label={<span style={labelStyle}>HOTSPOT SIZE: {form.getFieldValue('size') || 40}px</span>}
           style={{ marginBottom: 10 }}
         >
-          <Slider min={20} max={80} step={5} />
+          <Slider min={10} max={1000} step={5} />
         </Form.Item>
       )}
 
-      {matchesQuery("OPACITY", ["opacity", "transparency", "alpha"]) && (
+      {matchesQuery("NAME SIZE", ["name", "text", "size"]) && (
         <Form.Item
-          name="opacity"
-          label={<span style={labelStyle}>OPACITY: {Math.round((form.getFieldValue('opacity') ?? 1) * 100)}%</span>}
+          name="nameSize"
+          label={<span style={labelStyle}>NAME SIZE: {form.getFieldValue('nameSize') || 13}px</span>}
           style={{ marginBottom: 10 }}
         >
-          <Slider min={0.1} max={1} step={0.05} />
+          <Slider min={10} max={40} step={1} />
         </Form.Item>
+      )}
+
+      {matchesQuery("NAME OFFSET", ["name", "offset", "position", "align", "x", "y"]) && (
+        <>
+          <Form.Item
+            name="nameOffsetX"
+            label={<span style={labelStyle}>NAME OFFSET X: {form.getFieldValue('nameOffsetX') || 0}px</span>}
+            style={{ marginBottom: 4 }}
+          >
+            <Slider min={-100} max={100} step={1} />
+          </Form.Item>
+          <Form.Item
+            name="nameOffsetY"
+            label={<span style={labelStyle}>NAME OFFSET Y: {form.getFieldValue('nameOffsetY') || 0}px</span>}
+            style={{ marginBottom: 10 }}
+          >
+            <Slider min={-100} max={100} step={1} />
+          </Form.Item>
+        </>
       )}
 
       {matchesQuery("SPHERICAL COORDINATES", ["yaw", "pitch", "position", "coordinates"]) && (

@@ -328,40 +328,7 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
         }}
       />
 
-      {/* Premium Glassmorphic Tooltip HUD Overlay */}
-      {hoveredHotspot && (
-        <div
-          ref={tooltipRef}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            transform: 'translate(-50%, -50%)',
-            background: 'rgba(17, 17, 24, 0.85)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            borderRadius: '6px',
-            padding: '6px 12px',
-            color: '#f0eeff',
-            fontSize: '12px',
-            fontWeight: 500,
-            pointerEvents: 'none',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(108, 99, 255, 0.15)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            whiteSpace: 'nowrap',
-            animation: 'fadeIn 0.15s ease-out',
-            zIndex: 1000,
-          }}
-        >
-          {hoveredHotspot.type === 'navigation' && <span style={{ color: '#6c63ff', fontWeight: 'bold' }}>➔</span>}
-          {hoveredHotspot.type === 'info' && <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>ℹ</span>}
-          {hoveredHotspot.type === 'link' && <span style={{ color: '#ffb347', fontWeight: 'bold' }}>🔗</span>}
-          {hoveredHotspot.type === 'video' && <span style={{ color: '#ff4d6d', fontWeight: 'bold' }}>▶</span>}
-          <span>{hoveredHotspot.tooltip || 'View Scene'}</span>
-        </div>
-      )}
+
 
     </div>
   );

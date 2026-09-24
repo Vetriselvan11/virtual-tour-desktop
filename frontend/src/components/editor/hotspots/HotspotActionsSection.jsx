@@ -83,9 +83,9 @@ export default function HotspotActionsSection({
             </div>
           )}
 
-          {matchesQuery("TOOLTIP TEXT", ["tooltip", "label", "text"]) && (
-            <Form.Item name="tooltip" label={<span style={labelStyle}>TOOLTIP TEXT</span>} style={{ marginBottom: 10 }}>
-              <Input placeholder="Label shown on hover..." style={{ fontSize: 12 }} />
+          {matchesQuery("HOTSPOT NAME", ["tooltip", "label", "text", "name"]) && (
+            <Form.Item name="tooltip" label={<span style={labelStyle}>HOTSPOT NAME</span>} style={{ marginBottom: 10 }}>
+              <Input placeholder="Enter hotspot name..." style={{ fontSize: 12 }} />
             </Form.Item>
           )}
 
