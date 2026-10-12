@@ -19,6 +19,11 @@ export default class InputManager {
     this.dragDist = 0;
     this.lastTouchDist = 0;
 
+    // Krpano-style Kinetic Momentum & Inertia Glide
+    this.velocityTheta = 0;
+    this.velocityPhi = 0;
+    this.isDecelerating = false;
+
     // Gyroscope State
     this.deviceOrientation = null;
     this.screenOrientation = 0;
@@ -152,12 +157,42 @@ export default class InputManager {
       }
       return false;
     });
+
+    // Krpano-style kinetic momentum & inertia glide ticker
+    this.core.renderLoop.registerHook('input_kinetic_inertia', () => {
+      if (this.isDecelerating && !this.isDraggingCamera) {
+        // Smooth exponential friction decay (0.91 factor per frame)
+        this.velocityTheta *= 0.91;
+        this.velocityPhi *= 0.91;
+
+        this.core.targetTheta += this.velocityTheta;
+        this.core.targetPhi = Math.max(0.08, Math.min(Math.PI - 0.08, this.core.targetPhi + this.velocityPhi));
+
+        if (Math.abs(this.velocityTheta) < 0.00003 && Math.abs(this.velocityPhi) < 0.00003) {
+          this.isDecelerating = false;
+          this.velocityTheta = 0;
+          this.velocityPhi = 0;
+          this.core.baseTargetPhi = this.core.targetPhi;
+          this.core.renderLoop.setContinuousDemand('inertia', false);
+          this.core.renderLoop.setContinuousDemand('interaction', false);
+          this.core.triggerIdleResume();
+        }
+        return true; // Continuously renders during kinetic glide
+      }
+      return false;
+    });
   }
 
   handlePointerDown(clientX, clientY, e, isTouch) {
     if (this.mode === 'WEBXR') return; // Block mouse/touch when VR owns camera
     if (this.core.isTinyPlanetPlaying()) return;
     if (!isTouch && (e.button === 2 || e.which === 3)) return; // context
+
+    // Reset momentum upon new click/touch
+    this.isDecelerating = false;
+    this.velocityTheta = 0;
+    this.velocityPhi = 0;
+    this.core.renderLoop.setContinuousDemand('inertia', false);
 
     const rect = this.mount.getBoundingClientRect();
     this.core.mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
@@ -191,15 +226,23 @@ export default class InputManager {
       const dy = clientY - this.prevMouse.y;
       this.dragDist += Math.abs(dx) + Math.abs(dy);
       
-      const speed = isTouch ? 0.004 : 0.003;
+      // Calibrate drag sensitivity proportional to FOV for smooth, natural krpano-like control
+      const fovRatio = (this.core.fov || 62) / 62;
+      const speed = isTouch ? (0.0018 * fovRatio) : (0.0013 * fovRatio);
+      
+      const deltaTheta = -dx * speed;
+      const deltaPhi = dy * speed;
+
+      // Low-pass velocity filter for velvet-smooth kinetic momentum
+      this.velocityTheta = this.velocityTheta * 0.35 + deltaTheta * 0.65;
+      this.velocityPhi = this.velocityPhi * 0.35 + deltaPhi * 0.65;
       
       // If gyro is on, touch drag temporarily adjusts the offset instead of base camera
       if (this.gyroEnabled) {
-        this.gyroOffsetTheta -= dx * speed;
-        // Optional: vertical gyro offset adjustment
+        this.gyroOffsetTheta += deltaTheta;
       } else {
-        this.core.targetTheta -= dx * speed;
-        this.core.targetPhi = Math.max(0.1, Math.min(Math.PI - 0.1, this.core.targetPhi + dy * speed));
+        this.core.targetTheta += deltaTheta;
+        this.core.targetPhi = Math.max(0.08, Math.min(Math.PI - 0.08, this.core.targetPhi + deltaPhi));
       }
       
       this.prevMouse = { x: clientX, y: clientY };
@@ -220,10 +263,17 @@ export default class InputManager {
     if (this.core.isTinyPlanetPlaying()) return;
     this.core.hotspotManager.handleMouseUp();
     this.isDraggingCamera = false;
-    this.core.baseTargetPhi = this.core.targetPhi;
-    this.core.renderLoop.setContinuousDemand('interaction', false);
-    this.core.renderLoop.requestRender(5);
-    this.core.triggerIdleResume();
+
+    // Krpano-style release: if velocity exists, glide gracefully with momentum
+    if (Math.abs(this.velocityTheta) > 0.0001 || Math.abs(this.velocityPhi) > 0.0001) {
+      this.isDecelerating = true;
+      this.core.renderLoop.setContinuousDemand('inertia', true);
+    } else {
+      this.core.baseTargetPhi = this.core.targetPhi;
+      this.core.renderLoop.setContinuousDemand('interaction', false);
+      this.core.renderLoop.requestRender(5);
+      this.core.triggerIdleResume();
+    }
   }
 
   // --- GYROSCOPE ---

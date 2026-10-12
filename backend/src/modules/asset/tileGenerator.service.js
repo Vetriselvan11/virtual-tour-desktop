@@ -5,6 +5,9 @@ const { UPLOADS_DIR } = require('../../config/directories.config');
 let sharp = null;
 try {
   sharp = require('sharp');
+  // Limit Sharp to 1 thread to prevent it from saturating all CPU cores 
+  // and lagging the Electron Renderer UI thread during large 8K uploads
+  sharp.concurrency(1);
 } catch {
   // Sharp not available in environment
 }
@@ -141,8 +144,25 @@ class TileGeneratorService {
 
     console.log(`[TileGenerator] Generating multi-res tile pyramid for "${filename}" (${masterWidth}x${masterHeight}, ${levels.length} levels)...`);
 
-    // 3. Generate tiles level by level
-    for (const lvl of levels) {
+    // 4. Save metadata.json first and return it instantly to unblock the upload request
+    const tileConfig = {
+      enabled: true,
+      format: 'webp',
+      tileSize,
+      width: masterWidth,
+      height: masterHeight,
+      maxLevel: levels.length - 1,
+      basePath: baseUrl,
+      levels,
+      generatedAt: new Date().toISOString()
+    };
+    fs.writeFileSync(metadataPath, JSON.stringify(tileConfig, null, 2), 'utf8');
+
+    // Run the heavy CPU bound tile generation loop in a detached background promise
+    (async () => {
+      try {
+        // 3. Generate tiles level by level
+        for (const lvl of levels) {
       const levelDir = path.join(tilesDir, `level_${lvl.level}`);
       if (!fs.existsSync(levelDir)) {
         fs.mkdirSync(levelDir, { recursive: true });
@@ -179,23 +199,12 @@ class TileGeneratorService {
             .toFile(tilePath);
         }
       }
-    }
-
-    // 4. Save metadata.json
-    const tileConfig = {
-      enabled: true,
-      format: 'webp',
-      tileSize,
-      width: masterWidth,
-      height: masterHeight,
-      maxLevel: levels.length - 1,
-      basePath: baseUrl,
-      levels,
-      generatedAt: new Date().toISOString()
-    };
-
-    fs.writeFileSync(metadataPath, JSON.stringify(tileConfig, null, 2), 'utf8');
-    console.log(`[TileGenerator] Successfully generated ${levels.length} levels for "${filename}" at ${tilesDir}`);
+      } // Closes for (const lvl of levels)
+      console.log(`[TileGenerator] Successfully generated ${levels.length} levels for "${filename}" at ${tilesDir}`);
+      } catch(e) { throw e; } // Closes try
+    })().catch(err => {
+      console.warn(`[TileGenerator] Background tile generation failed for "${filename}":`, err.message);
+    });
 
     return tileConfig;
   }

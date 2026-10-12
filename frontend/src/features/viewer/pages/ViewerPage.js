@@ -354,11 +354,7 @@ export default function ViewerPage() {
 
   const goToScene = (sceneId) => {
     if (sceneId === currentSceneId) return;
-    setTransitioning(true);
-    setTimeout(() => {
-      setCurrentSceneId(sceneId);
-      setTimeout(() => setTransitioning(false), 350);
-    }, 350);
+    setCurrentSceneId(sceneId);
   };
 
   // Initialize and synchronize HotspotActionEngine

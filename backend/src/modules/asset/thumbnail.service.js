@@ -6,6 +6,7 @@ const { UPLOADS_DIR } = require('../../config/directories.config');
 let sharp = null;
 try {
   sharp = require('sharp');
+  sharp.concurrency(1);
 } catch {
   // sharp not installed; will use fallback image processing
 }

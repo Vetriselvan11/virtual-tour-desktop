@@ -67,13 +67,22 @@ export default class SceneManager {
 
     // Reset camera FOV and Pitch/Yaw angles to scene's starting orientation
     if (this.viewerCore) {
-      const defaultFov = sceneConf.fov !== undefined ? parseFloat(sceneConf.fov) : 95;
-      const initialYaw = (sceneConf.initialYaw !== undefined && sceneConf.initialYaw !== null)
+      let defaultFov = sceneConf.fov !== undefined ? parseFloat(sceneConf.fov) : 62;
+      if (isNaN(defaultFov)) defaultFov = 62;
+      if (defaultFov > 78 && this.viewerCore._calculateVFovFromMFov) {
+        defaultFov = this.viewerCore._calculateVFovFromMFov(defaultFov, this.viewerCore.camera?.aspect || 1.777);
+      }
+      defaultFov = Math.max(30, Math.min(70, defaultFov));
+
+      let initialYaw = (sceneConf.initialYaw !== undefined && sceneConf.initialYaw !== null)
         ? parseFloat(sceneConf.initialYaw)
         : (this.viewerCore.targetTheta || 0);
-      const initialPitch = (sceneConf.initialPitch !== undefined && sceneConf.initialPitch !== null)
+      if (isNaN(initialYaw)) initialYaw = this.viewerCore.targetTheta || 0;
+
+      let initialPitch = (sceneConf.initialPitch !== undefined && sceneConf.initialPitch !== null)
         ? parseFloat(sceneConf.initialPitch)
         : 0;
+      if (isNaN(initialPitch)) initialPitch = 0;
 
       this.viewerCore.setCameraOrientation(initialYaw, initialPitch, defaultFov);
     }
@@ -95,7 +104,8 @@ export default class SceneManager {
     if (initialLoadUrl) this.textureManager.setTransitioning(initialLoadUrl, true);
     if (masterUrl && masterUrl !== initialLoadUrl) this.textureManager.setTransitioning(masterUrl, true);
 
-    const transitionDur = sceneConf.transitionDuration !== undefined ? parseFloat(sceneConf.transitionDuration) : 0.35;
+    let transitionDur = sceneConf.transitionDuration !== undefined ? parseFloat(sceneConf.transitionDuration) : 0.35;
+    if (isNaN(transitionDur)) transitionDur = 0.35;
     const effect = sceneConf.transitionEffect || 'fade';
 
     // ── STAGE 1: Fast initial texture presentation ───────────────────────────
@@ -175,8 +185,8 @@ export default class SceneManager {
           if (sphere && sphere.material) sphere.material.opacity = 1;
           finalizeTransition();
         } else {
-          // Smooth seamless fade presentation without black screen pause
-          if (sphere && sphere.material) sphere.material.opacity = 0.6;
+          // Smooth seamless fade presentation without jarring dark dip
+          if (sphere && sphere.material) sphere.material.opacity = 0.85;
           this.transitionManager.fade(sphere, 1, transitionDur, finalizeTransition);
         }
       },

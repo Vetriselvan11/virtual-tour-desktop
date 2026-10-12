@@ -166,17 +166,10 @@ class DeviceProfileManager {
     }
   }
 
-  /**
-   * Whether to upgrade active scene to full master resolution in the editor after preview settles.
-   */
   get shouldUpgradeMasterInEditor() {
-    const isStandalone = typeof window !== 'undefined' && !!window.__TOUR_CONFIG__;
-    
-    // Export and standalone viewer ALWAYS use Level 3 Master.
-    if (isStandalone) return true;
-
-    // Low devices stay on Level 2 preview in the editor to avoid GPU stalls.
-    return this.profile !== PROFILE_LOW;
+    // Always upgrade to Level 3 Master in both export and editor modes, 
+    // to ensure original quality is always visible.
+    return true;
   }
 
   /**

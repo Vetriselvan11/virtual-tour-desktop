@@ -27,9 +27,12 @@ export default class ViewerCore {
     // Viewport layout dimensions
     const W = this.mount.clientWidth;
     const H = this.mount.clientHeight;
+    const aspect = (W && H) ? W / H : 1.777;
 
-    // 1. Perspective Camera
-    this.camera = new THREE.PerspectiveCamera(95, (W && H) ? W / H : 1.77, 0.1, 100);
+    // 1. Perspective Camera - calibrated to krpano MFOV standard (eliminates wide-angle stretching)
+    this.targetMFov = 90; // Standard Krpano Max Field of View reference (90° horizontal on widescreen)
+    const initialVFov = this._calculateVFovFromMFov(this.targetMFov, aspect);
+    this.camera = new THREE.PerspectiveCamera(initialVFov, aspect, 0.1, 100);
     this.camera.position.set(0, 0, 0);
 
     // 2. WebGL Renderer with device-aware capped DPR
@@ -68,9 +71,9 @@ export default class ViewerCore {
     // Initialize Gizmo in Editor Mode
     this.object3dManager.initTransformControls(this.renderer.domElement);
 
-    // Camera lookup orientation values
+    // Camera lookup orientation values (natural vFOV eliminates edge distortion)
     this.spherical = { phi: Math.PI / 2, theta: 0 };
-    this.fov = 95;
+    this.fov = initialVFov;
     
     // Drag, click, and interaction trackers
     this.isDraggingCamera = false;
@@ -81,7 +84,7 @@ export default class ViewerCore {
 
     // Cinematic Auto-Rotation and Easing/Inertia States
     this.autoRotateActive = false; // Disabled by default in editor for demand-driven rendering!
-    this.autoRotateSpeed = 0.004; // Radians per frame (rate-independent delta sweep)
+    this.autoRotateSpeed = 0.0006; // Radians per frame (~2.0 deg/sec at 60fps - silky, gentle cinematic drift matching krpano)
     this.targetTheta = 0;
     this.targetPhi = Math.PI / 2;
     this.baseTargetPhi = Math.PI / 2; // Baseline target pitch for sinusoidal auto-rotation drift
@@ -90,7 +93,7 @@ export default class ViewerCore {
     this.userInteracting = false;
     
     // Smooth camera glide properties
-    this.cameraEase = 0.055;
+    this.cameraEase = 0.12;
     this.qualityMode = DeviceProfile.current;
     this.editMode = false; // Prevents dragging hotspots in preview/viewer mode
 
@@ -116,10 +119,9 @@ export default class ViewerCore {
       const rateDelta = Math.min(delta, 0.1);
       let isMoving = false;
       
-      // Auto-Rotation and Sinusoidal floating drift
+      // Auto-Rotation
       if (this.autoRotateActive && !this.userInteracting) {
         this.targetTheta += this.autoRotateSpeed * (rateDelta * 60);
-        this.targetPhi = this.baseTargetPhi + 0.04 * Math.sin(time * 0.85);
         isMoving = true;
       }
       
@@ -180,8 +182,29 @@ export default class ViewerCore {
     }
   }
 
+  /**
+   * Calibrates vertical FOV from krpano-standard Max Field of View (MFOV).
+   * On widescreen (aspect > 1), MFOV maps to Horizontal FOV.
+   * On mobile portrait (aspect <= 1), MFOV maps to Vertical FOV.
+   */
+  _calculateVFovFromMFov(mfov, aspect) {
+    if (!aspect || isNaN(aspect) || aspect <= 0) aspect = 1.777;
+    if (aspect > 1.0) {
+      const halfHRad = (mfov * 0.5) * (Math.PI / 180);
+      const halfVRad = Math.atan(Math.tan(halfHRad) / aspect);
+      return halfVRad * 2 * (180 / Math.PI);
+    }
+    return mfov;
+  }
+
   _setFov(newFov) {
-    const clamped = Math.max(25, Math.min(105, newFov));
+    // If incoming newFov is > 78 (e.g. legacy 80-95° or MFOV), convert using screen aspect
+    let vFov = newFov;
+    if (newFov > 78 && this.camera && this.camera.aspect > 1.0) {
+      vFov = this._calculateVFovFromMFov(newFov, this.camera.aspect);
+    }
+    // Clamped between 30° (telephoto zoom) and 70° (natural wide view with ZERO rectilinear stretching)
+    const clamped = Math.max(30, Math.min(70, vFov));
     if (Math.abs(this.fov - clamped) > 0.001) {
       this.fov = clamped;
       if (this.camera) {
@@ -274,7 +297,12 @@ export default class ViewerCore {
       if (!this.mount) return;
       const W = this.mount.clientWidth;
       const H = this.mount.clientHeight;
-      this.camera.aspect = W / H;
+      if (!W || !H) return;
+      const aspect = W / H;
+      this.camera.aspect = aspect;
+      const vFov = this._calculateVFovFromMFov(this.targetMFov || 90, aspect);
+      this.fov = vFov;
+      this.camera.fov = vFov;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(W, H);
       if (this.tinyPlanetIntro) {

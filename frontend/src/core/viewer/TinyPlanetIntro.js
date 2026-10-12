@@ -154,12 +154,12 @@ export default class TinyPlanetIntro {
     this.elapsed = 0;
     this.hookId = `tiny_planet_intro_${Date.now()}`;
 
-    // Target end state
+    // Target end state (calibrated to krpano MFOV standard)
     this.targetYaw = 0;
     this.targetPitch = 0;
-    this.targetFovDegrees = 95;
-    this.targetFov = 95 * (Math.PI / 180);
-    this.wideFov = 108 * (Math.PI / 180);
+    this.targetFovDegrees = 62;
+    this.targetFov = 62 * (Math.PI / 180);
+    this.wideFov = 92 * (Math.PI / 180);
     this.startYaw = 0;
 
     // Callbacks
@@ -225,7 +225,7 @@ export default class TinyPlanetIntro {
     texture,
     targetYaw = 0,
     targetPitch = 0,
-    targetFov = 95,
+    targetFov = 62,
     duration = 5.0,
     holdDuration = 0.9,
     onProgress,
@@ -245,9 +245,15 @@ export default class TinyPlanetIntro {
     this.progress = 0;
     this.targetYaw = targetYaw;
     this.targetPitch = targetPitch;
-    this.targetFovDegrees = targetFov || 95;
+
+    // Convert and calibrate FOV
+    let effectiveFov = targetFov || 62;
+    if (effectiveFov > 78 && this.viewerCore?._calculateVFovFromMFov) {
+      effectiveFov = this.viewerCore._calculateVFovFromMFov(effectiveFov, this.viewerCore.camera?.aspect || 1.777);
+    }
+    this.targetFovDegrees = Math.max(30, Math.min(70, effectiveFov));
     this.targetFov = this.targetFovDegrees * (Math.PI / 180);
-    this.wideFov = Math.max(this.targetFov, 108 * (Math.PI / 180));
+    this.wideFov = Math.max(this.targetFov, 92 * (Math.PI / 180));
 
     // Calculate start yaw so rotation glides seamlessly into targetYaw
     const totalSpinDelta = 0.35; // ~20 degrees slow cinematic rotation
@@ -448,6 +454,10 @@ export default class TinyPlanetIntro {
     this.quad.visible = false;
     if (this.viewerCore?.sphere) {
       this.viewerCore.sphere.visible = true;
+    }
+    if (this.onCompleteCallback) {
+      this.onCompleteCallback();
+      this.onCompleteCallback = null;
     }
   }
 

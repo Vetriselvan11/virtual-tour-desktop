@@ -58,7 +58,9 @@ export const HotspotAnimations = {
    */
   interpolateHoverScale: (sprite, baseScale, isHovered) => {
     if (!sprite) return;
-    const targetScale = isHovered ? baseScale * 1.25 : baseScale;
-    sprite.scale.set(targetScale, targetScale, 1);
+    // Hover scale effect removed as per user request
+    const targetScale = baseScale;
+    const scaleFactor = (sprite.material && sprite.material.map && sprite.material.map.userData && sprite.material.map.userData.scaleFactor) || 2;
+    sprite.scale.set(targetScale * scaleFactor, targetScale * scaleFactor, 1);
   }
 };

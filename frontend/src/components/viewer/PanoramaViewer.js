@@ -57,6 +57,8 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
     : (selectedHotspot ? [selectedHotspot.id] : []);
   const selectionKey = selectedHotspotIds.join(',');
 
+  const [engineReady, setEngineReady] = useState(false);
+
   // 1. Singleton Engine Mount: Initialize Three.js ONLY once!
   useEffect(() => {
     if (!mountRef.current) return;
@@ -79,12 +81,14 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
     };
     checkCapabilities();
 
+    setEngineReady(true);
     if (onReady) onReady();
 
     // Clean up ONLY when the React component is fully unmounted
     return () => {
       engine.destroy();
       engineRef.current = null;
+      setEngineReady(false);
     };
   }, []); // Empty dependencies ensure WebGL renderer is never recreated!
 
@@ -93,7 +97,7 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
     const engine = engineRef.current;
     if (!engine) return;
     engine.setAutoRotate(autoRotate);
-  }, [autoRotate]);
+  }, [autoRotate, engineReady]);
 
   // 2. Texture Swapper: Swap textures dynamically in-place with scene transition parameters
   useEffect(() => {
@@ -118,7 +122,7 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
         });
       }
     });
-  }, [sceneId, imageUrl, scene?.transitionEffect, scene?.transitionDuration, enableTinyPlanetIntro, editMode]); // Fires swaps when scene or image changes!
+  }, [sceneId, imageUrl, scene?.transitionEffect, scene?.transitionDuration, enableTinyPlanetIntro, editMode, engineReady]); // Fires swaps when scene or image changes!
 
   // 3. Hotspots Synchronizer: Redraw hotspots in-place in WebGL scene
   useEffect(() => {
@@ -129,7 +133,7 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
     if ((!engine.sceneManager.isTransitioning || engine.sceneManager.currentSceneId === sceneId) && !engine.isTinyPlanetPlaying()) {
       engine.hotspotManager.rebuild(hotspots, selectedHotspotIds);
     }
-  }, [hotspots, selectionKey, sceneId]); // Refreshes sprites on list/selection change!
+  }, [hotspots, selectionKey, sceneId, engineReady]); // Refreshes sprites on list/selection change!
 
   // 3b. 3D Objects Synchronizer: Redraw 3D objects in WebGL scene
   useEffect(() => {
@@ -140,20 +144,20 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
     if (!engine.sceneManager.isTransitioning || engine.sceneManager.currentSceneId === sceneId) {
       engine.object3dManager.rebuild(list, selectedObjectId);
     }
-  }, [objects3d, selectedObjectId, sceneId, scene?.objects3d]);
+  }, [objects3d, selectedObjectId, sceneId, scene?.objects3d, engineReady]);
 
   // 4. Snap Settings & Selection Sync to Engine
   useEffect(() => {
     const engine = engineRef.current;
     if (!engine) return;
     engine.snapSettings = snapSettings;
-  }, [snapSettings]);
+  }, [snapSettings, engineReady]);
 
   useEffect(() => {
     const engine = engineRef.current;
     if (!engine) return;
     engine.selectedHotspotIds = selectedHotspotIds;
-  }, [selectionKey]);
+  }, [selectionKey, engineReady]);
 
   // 5. Callback Bridge Synchronization
   useEffect(() => {
@@ -206,7 +210,8 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
     onHotspotEnterView,
     onObjectClick,
     onObjectHover,
-    onObjectTransformChange
+    onObjectTransformChange,
+    engineReady
   ]);
 
   // Expose Imperative API hooks identically to match existing pages

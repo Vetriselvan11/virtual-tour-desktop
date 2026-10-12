@@ -5,7 +5,17 @@ const imageCache = new Map();
 
 function resolveIconUrl(url) {
   if (!url) return null;
+  
+  // Intercept old broken uploaded arrow icons and remap to local high-res arrow
+  if (url.includes('vtourskin_hotspot') || url.includes('chevron-blue')) {
+    return '/icons/chevron-blue.png';
+  }
+
   if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('blob:')) {
+    return url;
+  }
+  // If it's a frontend public icon, return as is (it will resolve relative to frontend)
+  if (url.startsWith('/icons/')) {
     return url;
   }
   return getImageUrl ? getImageUrl(url) : url;
@@ -23,7 +33,9 @@ function getOrLoadImage(rawUrl, onLoaded) {
   }
 
   const img = new Image();
-  img.crossOrigin = 'anonymous';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    img.crossOrigin = 'anonymous';
+  }
   const entry = { img, loaded: false, callbacks: onLoaded ? [onLoaded] : [] };
   imageCache.set(url, entry);
 
@@ -59,12 +71,36 @@ export const HotspotIcons = {
    * @returns {THREE.CanvasTexture} Texture asset loaded in memory
    */
   createTexture: (hotspot, isHovered, isSelected) => {
-    const size = 128;
+    const DRAW_SIZE = 128;
+    let CANVAS_SIZE = 256;
+
+    const label = hotspot.tooltip;
+    const nameSize = hotspot.nameSize || 13;
+    const offsetX = hotspot.nameOffsetX !== undefined ? hotspot.nameOffsetX : 0;
+    const offsetY = hotspot.nameOffsetY !== undefined ? hotspot.nameOffsetY : DRAW_SIZE / 2 + 10;
+
+    if (label) {
+      const tmpCanvas = document.createElement('canvas');
+      const tmpCtx = tmpCanvas.getContext('2d');
+      tmpCtx.font = `bold ${nameSize}px "Inter", sans-serif`;
+      const textWidth = tmpCtx.measureText(label).width;
+      
+      const reqWidth = textWidth + Math.abs(offsetX) * 2 + DRAW_SIZE;
+      const reqHeight = nameSize * 2 + Math.abs(offsetY) * 2 + DRAW_SIZE;
+      
+      CANVAS_SIZE = Math.max(256, Math.ceil(Math.max(reqWidth, reqHeight) / 2) * 2);
+    }
+
+    const OFFSET = (CANVAS_SIZE - DRAW_SIZE) / 2;
+
     const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
+    canvas.width = CANVAS_SIZE;
+    canvas.height = CANVAS_SIZE;
     const ctx = canvas.getContext('2d');
 
+    ctx.translate(OFFSET, OFFSET);
+
+    const size = DRAW_SIZE;
     const center = size / 2;
     const radius = size / 3.2; // Optimized radius to allow outer selection rings
     const color = hotspot.color || '#6c63ff';
@@ -74,35 +110,31 @@ export const HotspotIcons = {
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
+    texture.userData = { scaleFactor: CANVAS_SIZE / DRAW_SIZE };
 
     const render = (loadedImg) => {
       ctx.clearRect(0, 0, size, size);
 
-      if (isCustom && customIconUrl && iconStyle === 'frameless') {
+      if (isCustom && customIconUrl) {
         // --- FRAMELESS CUSTOM ICON MODE ---
-        // 1. Soft radial glow
-        const glowGrad = ctx.createRadialGradient(center, center, radius * 0.3, center, center, size / 2);
-        glowGrad.addColorStop(0, color);
-        glowGrad.addColorStop(0.4, color + '55');
-        glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = glowGrad;
-        ctx.beginPath();
-        ctx.arc(center, center, size / 2, 0, Math.PI * 2);
-        ctx.fill();
+        // 1. Soft radial glow (Removed as per user request to remove background)
+        // const glowGrad = ctx.createRadialGradient(center, center, radius * 0.3, center, center, size / 2);
+        // glowGrad.addColorStop(0, color);
+        // glowGrad.addColorStop(0.4, color + '55');
+        // glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        // ctx.fillStyle = glowGrad;
+        // ctx.beginPath();
+        // ctx.arc(center, center, size / 2, 0, Math.PI * 2);
+        // ctx.fill();
 
-        // 2. Selection ring if selected
-        if (isSelected) {
-          ctx.beginPath();
-          ctx.arc(center, center, radius + 8, 0, Math.PI * 2);
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 2.5;
-          ctx.stroke();
-        }
+        // 2. Selection ring removed as per user request
 
         // 3. Draw custom image
         if (loadedImg) {
-          const imgDim = size * 0.72;
+          const imgDim = size * 0.9;
+          ctx.save();
           ctx.drawImage(loadedImg, (size - imgDim) / 2, (size - imgDim) / 2, imgDim, imgDim);
+          ctx.restore();
         } else {
           // Placeholder spinner/dot
           ctx.fillStyle = color;
@@ -122,14 +154,7 @@ export const HotspotIcons = {
         ctx.arc(center, center, size / 2, 0, Math.PI * 2);
         ctx.fill();
 
-        // 2. Dashboard Pinned Selection ring (Dashed rotating halo)
-        if (isSelected) {
-          ctx.beginPath();
-          ctx.arc(center, center, radius + 6, 0, Math.PI * 2);
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 2.5;
-          ctx.stroke();
-        }
+        // 2. Dashboard Pinned Selection ring removed as per user request
 
         // 3. Main Glyph Background Circle
         ctx.beginPath();
@@ -139,7 +164,7 @@ export const HotspotIcons = {
 
         // White inner borders
         ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = isHovered || isSelected ? 4 : 3;
+        ctx.lineWidth = isSelected ? 4 : 3;
         ctx.stroke();
 
         // 4. Content: Custom Image or Vector Preset
@@ -316,6 +341,36 @@ export const HotspotIcons = {
             ctx.fill();
           }
         }
+      }
+
+      // Draw Hotspot Name (Tooltip) around the icon
+      const label = hotspot.tooltip;
+      if (label) {
+        const nameSize = hotspot.nameSize || 13;
+        const offsetX = hotspot.nameOffsetX !== undefined ? hotspot.nameOffsetX : 0;
+        const offsetY = hotspot.nameOffsetY !== undefined ? hotspot.nameOffsetY : size / 2 + 10; // Default below
+        
+        ctx.font = `bold ${nameSize}px "Inter", sans-serif`;
+        
+        // Text Shadow for readability
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 1;
+        ctx.fillStyle = '#ffffff';
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        const textX = center + offsetX;
+        const textY = center + offsetY;
+
+        ctx.fillText(label, textX, textY);
+        
+        // Reset shadow
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
       }
 
       texture.needsUpdate = true;

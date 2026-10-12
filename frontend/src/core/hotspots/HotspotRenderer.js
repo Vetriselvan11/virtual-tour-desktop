@@ -125,8 +125,7 @@ export default class HotspotRenderer {
         const isSelected = this.selectedIds.has(hotspot.id);
         const baseScale = (hotspot.size || 40) / 110;
 
-        // 1. Zoom Compensation: Keep screenspace size stable during scrolls
-        HotspotSprite.applyBillboardZoomScaling(sprite, ring, this.camera, baseScale);
+        // 1. Zoom Compensation removed as per user request
 
         // 2. Selection Ring Spin: Slowly rotate selected indicators
         if (isSelected && ring && ring.material) {
@@ -134,11 +133,11 @@ export default class HotspotRenderer {
         }
 
         // 3. Subtle Sinus Floating (waves pitch slightly, disabled if hotspot position locked)
+        const yaw = hotspot.yaw || 0;
         let waveOffset = 0;
         if (!hotspot.locked) {
-          waveOffset = Math.sin(time * 2.0 + hotspot.yaw) * 0.022;
+          waveOffset = Math.sin(time * 2.0 + yaw) * 0.022;
         }
-        const yaw = hotspot.yaw || 0;
         const pitch = (hotspot.pitch || 0) + waveOffset * 0.12;
         const r = 4.78; // Offset radius boundaries
 
@@ -146,6 +145,21 @@ export default class HotspotRenderer {
         sprite.position.x = r * Math.cos(pitch) * Math.sin(yaw);
         sprite.position.y = r * Math.sin(pitch);
         sprite.position.z = r * Math.cos(pitch) * Math.cos(yaw);
+
+        // Prevent NaN quaternions when looking straight down or up
+        if (Math.abs(sprite.position.x) < 0.001 && Math.abs(sprite.position.z) < 0.001) {
+          sprite.up.set(0, 0, 1);
+        } else {
+          sprite.up.set(0, 1, 0);
+        }
+        
+        // Keep the mesh flat to the sphere surface and apply rotation
+        sprite.lookAt(0, 0, 0);
+        
+        const rotation = Number((hotspot.appearance && hotspot.appearance.rotation) || hotspot.rotation || 0);
+        if (!isNaN(rotation)) {
+          sprite.rotateZ(rotation);
+        }
 
         if (ring) {
           ring.position.copy(sprite.position);

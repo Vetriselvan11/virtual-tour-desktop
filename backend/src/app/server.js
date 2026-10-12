@@ -11,8 +11,8 @@ console.log('---------------------------------');
 // Helper to listen on port with automatic fallback if EADDRINUSE occurs
 function listenOnPort(targetPort) {
   return new Promise((resolve, reject) => {
-    const server = app.listen(targetPort, '127.0.0.1', () => {
-      console.log(`✅ Virtual Tour Backend running on http://127.0.0.1:${targetPort}`);
+    const server = app.listen(targetPort, '::', () => {
+      console.log(`✅ Virtual Tour Backend running on http://localhost:${targetPort}`);
       process.env.PORT = String(targetPort);
       resolve({ server, port: targetPort });
     });

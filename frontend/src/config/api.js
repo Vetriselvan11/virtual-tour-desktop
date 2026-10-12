@@ -9,12 +9,17 @@
  *
  * This means production builds work on any host without touching source code.
  */
-const API_BASE =
+let API_BASE =
   process.env.REACT_APP_API_URL ||
   (process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000'
+    ? 'http://127.0.0.1:5000'
     : typeof window !== 'undefined'
     ? window.location.origin
-    : 'http://localhost:5000');
+    : 'http://127.0.0.1:5000');
+
+// Force IPv4 loopback to avoid Chrome IPv6 ERR_CONNECTION_REFUSED bugs on Windows
+if (API_BASE && API_BASE.includes('localhost')) {
+  API_BASE = API_BASE.replace('localhost', '127.0.0.1');
+}
 
 export { API_BASE };
