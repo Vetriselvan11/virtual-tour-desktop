@@ -138,6 +138,7 @@ export default function EditorWorkspace({
               onSnapSettingsChange={setSnapSettings}
               onBulkUpdate={hotspotManager.handleBulkHotspotUpdate}
               onBulkDelete={hotspotManager.handleBulkHotspotDelete}
+              onApplySizeToAll={hotspotManager.handleApplyHotspotSizeToAll}
             />
           )}
 

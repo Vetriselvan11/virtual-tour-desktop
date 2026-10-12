@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Tooltip, Space, Input, Tag, Switch, Dropdown } from 'antd';
+import { Button, Tooltip, Space, Input, Tag, Switch, Dropdown, Popover } from 'antd';
 import Icon from '../../../components/common/Icon';
 import brandLogo from '../../../assets/logo.png';
 
@@ -16,6 +16,7 @@ export default function EditorTopbar({
   setTitleEditing,
   onTitleSave,
   onOpenTourSettings,
+  onUpdateDashboardColor,
   editMode,
   setEditMode,
   autoRotate,
@@ -120,6 +121,102 @@ export default function EditorTopbar({
             </Button>
           </Tooltip>
         )}
+
+        {/* Quick Viewer Dashboard Skin Color Picker */}
+        <Popover
+          trigger="click"
+          placement="bottomLeft"
+          title={
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>
+              Viewer Dashboard Skin Color
+            </div>
+          }
+          content={
+            <div style={{ padding: '4px 0', width: 220 }}>
+              <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 10 }}>
+                Select skin theme color for the 360 viewer bottom bar:
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
+                {[
+                  { name: 'Krpano Blue', color: '#1c4ca2' },
+                  { name: 'Midnight', color: '#0f172a' },
+                  { name: 'Dark Glass', color: '#18181b' },
+                  { name: 'Royal Purple', color: '#581c87' },
+                  { name: 'Emerald', color: '#065f46' },
+                  { name: 'Crimson', color: '#881337' },
+                  { name: 'Ocean Teal', color: '#0284c7' },
+                  { name: 'Amber', color: '#b45309' }
+                ].map(p => {
+                  const active = (tour?.dashboardColor || '#1c4ca2').toLowerCase() === p.color.toLowerCase();
+                  return (
+                    <div
+                      key={p.color}
+                      onClick={() => onUpdateDashboardColor && onUpdateDashboardColor(p.color)}
+                      title={p.name}
+                      style={{
+                        height: 26,
+                        borderRadius: 6,
+                        background: p.color,
+                        cursor: 'pointer',
+                        border: active ? '2.5px solid #ffffff' : '1px solid rgba(255,255,255,0.25)',
+                        boxShadow: active ? `0 0 8px ${p.color}` : 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transform: active ? 'scale(1.08)' : 'scale(1)',
+                        transition: 'transform 0.15s, border-color 0.15s'
+                      }}
+                    >
+                      {active && <span style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>✓</span>}
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
+                <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Custom:</span>
+                <input
+                  type="color"
+                  value={tour?.dashboardColor && tour.dashboardColor.startsWith('#') && tour.dashboardColor.length === 7 ? tour.dashboardColor : '#1c4ca2'}
+                  onChange={e => onUpdateDashboardColor && onUpdateDashboardColor(e.target.value)}
+                  style={{ width: 28, height: 26, border: '1px solid var(--border)', borderRadius: 4, cursor: 'pointer', background: 'none' }}
+                />
+                <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--accent)' }}>
+                  {tour?.dashboardColor || '#1c4ca2'}
+                </span>
+              </div>
+            </div>
+          }
+        >
+          <Tooltip title="Viewer Dashboard Skin Color">
+            <Button
+              size="small"
+              style={{
+                background: 'var(--bg-tertiary)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-secondary)',
+                borderRadius: 'var(--radius-sm)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 26,
+                padding: '0 8px',
+                fontSize: 11,
+                gap: 5
+              }}
+            >
+              <div
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  background: tour?.dashboardColor || '#1c4ca2',
+                  boxShadow: `0 0 6px ${tour?.dashboardColor || '#1c4ca2'}`
+                }}
+              />
+              <span>Skin Color</span>
+            </Button>
+          </Tooltip>
+        </Popover>
       </Space>
 
       {/* Center Area - Mode Toggle Capsule & Current Scene Tag */}

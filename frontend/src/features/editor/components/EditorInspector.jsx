@@ -75,6 +75,8 @@ export default function EditorInspector({
                 currentScene={currentScene}
                 onUpdate={hotspotManager.handleHotspotUpdate}
                 onDelete={hotspotManager.handleHotspotDelete}
+                onApplySizeToAll={hotspotManager.handleApplyHotspotSizeToAll}
+                onApplyNameSizeToAll={hotspotManager.handleApplyNameSizeToAll}
                 onSelectSceneVisually={(hs) => {
                   hotspotManager.setActiveHotspotToConnect(hs);
                   setIsSceneConnectionModalOpen(true);

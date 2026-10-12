@@ -55,6 +55,13 @@ export function SceneSettingsPanel({
     onTourUpdate({ ...tour, scenes: updatedScenes });
   };
 
+  const handleApplyFovToAllScenes = (fovVal) => {
+    const val = Number(fovVal) || 80;
+    const updatedScenes = scenes.map(s => ({ ...s, fov: val }));
+    onTourUpdate({ ...tour, defaultFov: val, scenes: updatedScenes });
+    message.success(`Applied ${val}° un-zoomed view angle to all scenes!`);
+  };
+
   const handleCaptureInitialAngle = () => {
     if (!viewerRef?.current) {
       message.warning('Viewer controls not ready');
@@ -143,25 +150,54 @@ export function SceneSettingsPanel({
         borderRadius: 'var(--radius-md)',
         padding: 12,
       }}>
-        <div style={{ ...labelStyle, display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-          <Icon name="ZoomIn" size="xs" style={{ color: 'var(--accent)' }} /> 360 CAMERA FIELD OF VIEW (UNZOOMED)
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+          <div style={{ ...labelStyle, display: 'flex', alignItems: 'center', gap: 6, marginBottom: 0 }}>
+            <Icon name="ZoomIn" size="xs" style={{ color: 'var(--accent)' }} /> 360 CAMERA FIELD OF VIEW (UNZOOMED)
+          </div>
+          <button
+            type="button"
+            onClick={() => handleApplyFovToAllScenes(sceneFov)}
+            title="Apply this un-zoomed angle to all scenes in the tour"
+            style={{
+              background: 'rgba(99, 102, 241, 0.12)',
+              border: '1px solid rgba(99, 102, 241, 0.28)',
+              color: 'var(--accent)',
+              borderRadius: 4,
+              padding: '2px 7px',
+              fontSize: 10,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            Apply to All Scenes
+          </button>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-secondary)', marginBottom: 2 }}>
           <span>PERSPECTIVE ANGLE</span>
           <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>{sceneFov}°</span>
         </div>
+        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 6 }}>
+          Recommended: 80° (Standard wide un-zoomed) · 85°-90° (Extra wide)
+        </div>
         <Slider
-          min={60}
-          max={105}
+          min={55}
+          max={100}
           step={1}
           value={sceneFov}
           onChange={v => {
             setSceneFov(v);
             form.setFieldValue('fov', v);
             handleUpdateScene({ fov: v });
-            if (viewerRef?.current?.camera) {
-              viewerRef.current.camera.fov = v;
-              viewerRef.current.camera.updateProjectionMatrix();
+            if (viewerRef?.current) {
+              if (viewerRef.current._setFov) {
+                viewerRef.current._setFov(v);
+              } else if (viewerRef.current.camera) {
+                viewerRef.current.camera.fov = v;
+                viewerRef.current.camera.updateProjectionMatrix();
+                viewerRef.current.fov = v;
+              }
+              viewerRef.current.renderLoop?.requestRender(2);
             }
           }}
         />

@@ -50,7 +50,8 @@ export default function FloatingHotspotToolbar({
   snapSettings,
   onSnapSettingsChange,
   onBulkUpdate,
-  onBulkDelete
+  onBulkDelete,
+  onApplySizeToAll
 }) {
   const isMulti = selectedHotspots.length > 1;
   const activeHotspot = hotspot || selectedHotspots[0];
@@ -108,7 +109,10 @@ export default function FloatingHotspotToolbar({
   };
 
   const handleSizeChange = (size) => {
-    if (isMulti) {
+    const isSyncAll = localStorage.getItem('tour_sync_all_hotspot_size') === 'true';
+    if (isSyncAll && onApplySizeToAll) {
+      onApplySizeToAll(size, true);
+    } else if (isMulti) {
       onBulkUpdate({ size });
     } else {
       onUpdate({ ...activeHotspot, size });
@@ -243,9 +247,30 @@ export default function FloatingHotspotToolbar({
 
       {/* Row 4: Sizing Slider */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '2px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '9px', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '2px' }}>
           <span>HOTSPOT DIAMETER</span>
-          <span style={{ color: 'var(--cyan)' }}>{activeHotspot.size || 40}px</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ color: 'var(--cyan)' }}>{activeHotspot.size || 40}px</span>
+            {onApplySizeToAll && (
+              <button
+                type="button"
+                onClick={() => onApplySizeToAll(activeHotspot.size || 40, false)}
+                title="Apply this size to all hotspots across all scenes"
+                style={{
+                  background: 'rgba(56, 189, 248, 0.15)',
+                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  color: 'var(--cyan)',
+                  borderRadius: '3px',
+                  padding: '1px 5px',
+                  fontSize: '9px',
+                  cursor: 'pointer',
+                  fontWeight: 600
+                }}
+              >
+                Apply to All
+              </button>
+            )}
+          </div>
         </div>
         <Slider
           min={20}

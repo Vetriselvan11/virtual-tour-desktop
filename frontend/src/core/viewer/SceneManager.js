@@ -67,12 +67,12 @@ export default class SceneManager {
 
     // Reset camera FOV and Pitch/Yaw angles to scene's starting orientation
     if (this.viewerCore) {
-      let defaultFov = sceneConf.fov !== undefined ? parseFloat(sceneConf.fov) : 62;
-      if (isNaN(defaultFov)) defaultFov = 62;
-      if (defaultFov > 78 && this.viewerCore._calculateVFovFromMFov) {
+      let defaultFov = sceneConf.fov !== undefined ? parseFloat(sceneConf.fov) : 80;
+      if (isNaN(defaultFov)) defaultFov = 80;
+      if (defaultFov > 110 && this.viewerCore._calculateVFovFromMFov) {
         defaultFov = this.viewerCore._calculateVFovFromMFov(defaultFov, this.viewerCore.camera?.aspect || 1.777);
       }
-      defaultFov = Math.max(30, Math.min(70, defaultFov));
+      defaultFov = Math.max(35, Math.min(95, defaultFov));
 
       let initialYaw = (sceneConf.initialYaw !== undefined && sceneConf.initialYaw !== null)
         ? parseFloat(sceneConf.initialYaw)

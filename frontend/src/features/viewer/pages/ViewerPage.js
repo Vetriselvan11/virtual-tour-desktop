@@ -7,6 +7,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { ViewerInfoModal } from '../components/ViewerInfoModal';
 import { ViewerBtn, ViewerControlPanel, dirBtnStyle, zoomBtnStyle, smallControlBtnStyle } from '../components/ViewerControls';
 import SceneGalleryDock from '../components/SceneGalleryDock';
+import KrpanoClassicSkin from '../components/KrpanoClassicSkin';
 import PanoramaViewer from '../../../components/viewer/PanoramaViewer';
 import MiniMap from '../../../components/minimap/MiniMap';
 import { useGuidedTour } from '../../../core/editor/guided-tour/guidedTour';
@@ -36,6 +37,7 @@ export default function ViewerPage() {
   const [autoRotate, setAutoRotate] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isTinyPlanetIntroPlaying, setIsTinyPlanetIntroPlaying] = useState(false);
+  const [isFullDashboardHidden, setIsFullDashboardHidden] = useState(false);
 
   // Direct imperative ref for floorplan minimap radar (zero React re-renders during rotation)
   const miniMapRef = useRef(null);
@@ -552,12 +554,12 @@ export default function ViewerPage() {
       {/* Top Header UI */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0,
-        padding: isMobile ? '12px 14px' : '24px 32px',
-        background: 'linear-gradient(to bottom, rgba(10,10,15,0.9) 0%, rgba(10,10,15,0.5) 60%, transparent 100%)',
+        padding: isMobile ? '12px 14px' : '16px 28px',
+        background: 'transparent',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        opacity: effectiveShowUI ? 1 : 0,
-        transition: 'opacity 0.5s ease',
-        pointerEvents: effectiveShowUI ? 'auto' : 'none',
+        opacity: (effectiveShowUI && !isFullDashboardHidden) ? 1 : 0,
+        transition: 'opacity 0.4s ease',
+        pointerEvents: (effectiveShowUI && !isFullDashboardHidden) ? 'auto' : 'none',
         zIndex: 10,
         gap: 8,
       }}>
@@ -663,9 +665,9 @@ export default function ViewerPage() {
           border: '1px solid rgba(255, 255, 255, 0.12)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
           display: 'flex', alignItems: 'center', gap: '10px',
-          opacity: effectiveShowUI ? 1 : 0,
-          transition: 'opacity 0.5s ease',
-          pointerEvents: effectiveShowUI ? 'auto' : 'none',
+          opacity: (effectiveShowUI && !isFullDashboardHidden) ? 1 : 0,
+          transition: 'opacity 0.4s ease',
+          pointerEvents: (effectiveShowUI && !isFullDashboardHidden) ? 'auto' : 'none',
           zIndex: 1000
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -733,79 +735,25 @@ export default function ViewerPage() {
         </div>
       )}
 
-      {/* Redesigned Luxury Scene Gallery Dock */}
-      <SceneGalleryDock
+      {/* Exact Krpano Classic UI Skin */}
+      <KrpanoClassicSkin
         tour={tour}
         scenes={tour.scenes || []}
         currentSceneId={currentSceneId}
         onSelectScene={goToScene}
         getImageUrl={getImageUrl}
-        isMobile={isMobile}
-        showUI={effectiveShowUI}
-      />
-
-      {/* Floorplan Minimap Overlay */}
-      {(tour?.floorplan || tour?.floor2Plan) && (
-        <div style={{
-          position: 'absolute',
-          bottom: isMobile ? '80px' : '24px',
-          left: isMobile ? '12px' : '24px',
-          opacity: effectiveShowUI ? 1 : 0,
-          transition: 'opacity 0.5s ease',
-          pointerEvents: effectiveShowUI ? 'auto' : 'none',
-          zIndex: 15
-        }}>
-          <MiniMap
-            ref={miniMapRef}
-            tour={tour}
-            currentSceneId={currentSceneId}
-            onSelectScene={goToScene}
-            editMode={false}
-          />
-        </div>
-      )}
-
-      {/* Modernized Floating Control Console (Bottom Right Overlay) */}
-      <ViewerControlPanel
         viewerRef={viewerRef}
         autoRotate={autoRotate}
         setAutoRotate={setAutoRotate}
-        onReplayIntro={handleReplayIntro}
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={toggleFullscreen}
         showUI={effectiveShowUI}
         isMobile={isMobile}
+        isDashboardHidden={isFullDashboardHidden}
+        onToggleDashboardHidden={setIsFullDashboardHidden}
       />
 
-      {/* Subtle Guide Hints (Bottom Left Overlay - Auto-fades after user interaction) */}
-      <div style={{
-        position: 'absolute',
-        bottom: isMobile ? 14 : 24,
-        left: (tour?.floorplan || tour?.floor2Plan) ? (isMobile ? 12 : 240) : (isMobile ? 12 : 24),
-        display: isMobile ? 'none' : 'flex',
-        alignItems: 'center',
-        gap: 8,
-        background: 'rgba(10, 8, 16, 0.65)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        padding: '6px 14px',
-        borderRadius: 20,
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
-        fontSize: 11,
-        fontWeight: 500,
-        color: 'rgba(240, 238, 255, 0.65)',
-        opacity: (effectiveShowUI && !hasInteracted) ? 1 : 0,
-        transition: 'opacity 0.5s ease',
-        zIndex: 1001,
-        pointerEvents: 'none',
-        whiteSpace: 'nowrap'
-      }}>
-        <Icon name="MousePointer" size="xs" style={{ color: '#a78bfa' }} />
-        <span>Drag to rotate</span>
-        <span style={{ color: 'rgba(255,255,255,0.2)' }}>•</span>
-        <span>Scroll to zoom</span>
-        <span style={{ color: 'rgba(255,255,255,0.2)' }}>•</span>
-        <span>Arrow keys to switch scenes</span>
-      </div>
+
 
       <ViewerInfoModal activeInfoHotspot={activeInfoHotspot} setActiveInfoHotspot={setActiveInfoHotspot} getImageUrl={getImageUrl} />
 

@@ -29,9 +29,9 @@ export default class ViewerCore {
     const H = this.mount.clientHeight;
     const aspect = (W && H) ? W / H : 1.777;
 
-    // 1. Perspective Camera - calibrated to krpano MFOV standard (eliminates wide-angle stretching)
-    this.targetMFov = 90; // Standard Krpano Max Field of View reference (90° horizontal on widescreen)
-    const initialVFov = this._calculateVFovFromMFov(this.targetMFov, aspect);
+    // 1. Perspective Camera - standard un-zoomed natural panoramic FOV (80° vertical FOV)
+    this.targetFov = 80;
+    const initialVFov = 80;
     this.camera = new THREE.PerspectiveCamera(initialVFov, aspect, 0.1, 100);
     this.camera.position.set(0, 0, 0);
 
@@ -198,13 +198,14 @@ export default class ViewerCore {
   }
 
   _setFov(newFov) {
-    // If incoming newFov is > 78 (e.g. legacy 80-95° or MFOV), convert using screen aspect
-    let vFov = newFov;
-    if (newFov > 78 && this.camera && this.camera.aspect > 1.0) {
-      vFov = this._calculateVFovFromMFov(newFov, this.camera.aspect);
+    let vFov = Number(newFov);
+    if (isNaN(vFov)) vFov = 80;
+    // If incoming newFov is an extreme MFOV/diagonal > 110, convert using aspect
+    if (vFov > 110 && this.camera && this.camera.aspect > 1.0) {
+      vFov = this._calculateVFovFromMFov(vFov, this.camera.aspect);
     }
-    // Clamped between 30° (telephoto zoom) and 70° (natural wide view with ZERO rectilinear stretching)
-    const clamped = Math.max(30, Math.min(70, vFov));
+    // Clamped between 35° (telephoto zoom) and 95° (wide un-zoomed view)
+    const clamped = Math.max(35, Math.min(95, vFov));
     if (Math.abs(this.fov - clamped) > 0.001) {
       this.fov = clamped;
       if (this.camera) {
@@ -300,9 +301,9 @@ export default class ViewerCore {
       if (!W || !H) return;
       const aspect = W / H;
       this.camera.aspect = aspect;
-      const vFov = this._calculateVFovFromMFov(this.targetMFov || 90, aspect);
-      this.fov = vFov;
-      this.camera.fov = vFov;
+      const currentFov = Math.max(35, Math.min(95, this.fov || 80));
+      this.fov = currentFov;
+      this.camera.fov = currentFov;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(W, H);
       if (this.tinyPlanetIntro) {

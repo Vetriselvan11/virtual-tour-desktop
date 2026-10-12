@@ -43,7 +43,8 @@ export function useHotspotManager(tour, currentSceneId, setTourState, viewerRef)
       yaw, pitch,
       type: 'navigation',
       color: '#6c63ff',
-      size: 40,
+      size: tour.defaultHotspotSize || 40,
+      nameSize: tour.defaultHotspotNameSize || 13,
       opacity: 0.9,
       icon: 'arrow',
       tooltip: 'New Hotspot',
@@ -187,6 +188,52 @@ export function useHotspotManager(tour, currentSceneId, setTourState, viewerRef)
     }
   }, [clipboardHotspot, viewerRef, tour, currentSceneId, setTourState]);
 
+  const handleApplyHotspotSizeToAll = useCallback((newSize, silent = false) => {
+    if (!tour) return;
+    const numSize = Number(newSize) || 40;
+    const updatedTour = {
+      ...tour,
+      defaultHotspotSize: numSize,
+      scenes: (tour.scenes || []).map(s => ({
+        ...s,
+        hotspots: (s.hotspots || []).map(h => ({ ...h, size: numSize }))
+      }))
+    };
+    setTourState(updatedTour);
+    if (selectedHotspot) {
+      setSelectedHotspot(prev => prev ? { ...prev, size: numSize } : null);
+    }
+    setSelectedHotspots(prev => prev.map(h => ({ ...h, size: numSize })));
+    if (!silent) {
+      let count = 0;
+      (tour.scenes || []).forEach(s => { count += (s.hotspots || []).length; });
+      message.success(`Applied ${numSize}px size to all ${count} hotspot${count !== 1 ? 's' : ''} across all scenes!`);
+    }
+  }, [tour, selectedHotspot, setTourState]);
+
+  const handleApplyNameSizeToAll = useCallback((newNameSize, silent = false) => {
+    if (!tour) return;
+    const numSize = Number(newNameSize) || 13;
+    const updatedTour = {
+      ...tour,
+      defaultHotspotNameSize: numSize,
+      scenes: (tour.scenes || []).map(s => ({
+        ...s,
+        hotspots: (s.hotspots || []).map(h => ({ ...h, nameSize: numSize }))
+      }))
+    };
+    setTourState(updatedTour);
+    if (selectedHotspot) {
+      setSelectedHotspot(prev => prev ? { ...prev, nameSize: numSize } : null);
+    }
+    setSelectedHotspots(prev => prev.map(h => ({ ...h, nameSize: numSize })));
+    if (!silent) {
+      let count = 0;
+      (tour.scenes || []).forEach(s => { count += (s.hotspots || []).length; });
+      message.success(`Applied ${numSize}px label size to all ${count} hotspot${count !== 1 ? 's' : ''} across all scenes!`);
+    }
+  }, [tour, selectedHotspot, setTourState]);
+
   return {
     selectedHotspot,
     setSelectedHotspot,
@@ -204,6 +251,9 @@ export function useHotspotManager(tour, currentSceneId, setTourState, viewerRef)
     handleBulkHotspotUpdate,
     handleBulkHotspotDelete,
     handleDuplicateHotspot,
-    handlePasteHotspot
+    handlePasteHotspot,
+    handleApplyHotspotSizeToAll,
+    handleApplyNameSizeToAll
   };
 }
+

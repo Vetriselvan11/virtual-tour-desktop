@@ -351,6 +351,10 @@ export default function EditorPage() {
           setTitleEditing(false);
         }}
         onOpenTourSettings={() => setShowTourSettingsModal(true)}
+        onUpdateDashboardColor={(col) => {
+          setTourState(t => ({ ...t, dashboardColor: col }));
+          message.success('Dashboard color updated');
+        }}
         editMode={editMode}
         setEditMode={(mode) => { setEditMode(mode); if (mode) guidedTour.pauseTour(); else hotspotManager.clearSelection(); }}
         autoRotate={autoRotate}

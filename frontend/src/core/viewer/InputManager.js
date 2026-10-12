@@ -227,7 +227,7 @@ export default class InputManager {
       this.dragDist += Math.abs(dx) + Math.abs(dy);
       
       // Calibrate drag sensitivity proportional to FOV for smooth, natural krpano-like control
-      const fovRatio = (this.core.fov || 62) / 62;
+      const fovRatio = (this.core.fov || 80) / 80;
       const speed = isTouch ? (0.0018 * fovRatio) : (0.0013 * fovRatio);
       
       const deltaTheta = -dx * speed;

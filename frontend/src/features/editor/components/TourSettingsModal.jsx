@@ -13,6 +13,7 @@ export default function TourSettingsModal({
   const [form] = Form.useForm();
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [clientLogo, setClientLogo] = useState('');
+  const [dashboardColor, setDashboardColor] = useState('#1c4ca2');
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function TourSettingsModal({
         clientUrl: tour.clientUrl || ''
       });
       setClientLogo(tour.clientLogo || '');
+      setDashboardColor(tour.dashboardColor || '#1c4ca2');
     }
   }, [tour, visible, form]);
 
@@ -66,10 +68,11 @@ export default function TourSettingsModal({
         title: values.title,
         description: values.description,
         clientUrl: values.clientUrl,
-        clientLogo: clientLogo || ''
+        clientLogo: clientLogo || '',
+        dashboardColor: dashboardColor || '#1c4ca2'
       };
       onTourUpdate(updated);
-      message.success('Tour branding settings updated!');
+      message.success('Tour branding & skin settings updated!');
       onClose();
     });
   };
@@ -174,6 +177,130 @@ export default function TourSettingsModal({
                   Remove Logo
                 </Button>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Skin Color Section */}
+        <div style={{
+          background: 'var(--bg-tertiary)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-md)',
+          padding: '16px',
+          marginBottom: 20
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
+              360 VIEWER DASHBOARD SKIN COLOR
+            </div>
+            <span style={{
+              fontSize: 11,
+              fontFamily: 'monospace',
+              background: 'rgba(255,255,255,0.08)',
+              padding: '2px 8px',
+              borderRadius: 4,
+              color: 'var(--accent)'
+            }}>
+              {dashboardColor}
+            </span>
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 12 }}>
+            Customize the bottom control bar and thumbnails frame color in the 360 viewer.
+          </div>
+
+          {/* Color Presets */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
+            {[
+              { name: 'Krpano Blue', color: '#1c4ca2' },
+              { name: 'Midnight', color: '#0f172a' },
+              { name: 'Dark Glass', color: '#18181b' },
+              { name: 'Royal Purple', color: '#581c87' },
+              { name: 'Emerald', color: '#065f46' },
+              { name: 'Crimson', color: '#881337' },
+              { name: 'Ocean Teal', color: '#0284c7' },
+              { name: 'Amber', color: '#b45309' }
+            ].map((p) => {
+              const active = dashboardColor?.toLowerCase() === p.color.toLowerCase();
+              return (
+                <div
+                  key={p.color}
+                  onClick={() => setDashboardColor(p.color)}
+                  title={p.name}
+                  style={{
+                    width: 26,
+                    height: 26,
+                    borderRadius: '50%',
+                    background: p.color,
+                    cursor: 'pointer',
+                    border: active ? '2.5px solid #ffffff' : '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: active ? `0 0 10px ${p.color}, 0 2px 6px rgba(0,0,0,0.5)` : '0 1px 3px rgba(0,0,0,0.4)',
+                    transform: active ? 'scale(1.18)' : 'scale(1)',
+                    transition: 'transform 0.15s, border-color 0.15s, box-shadow 0.15s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  {active && (
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff' }} />
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Custom Color Input */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 'auto' }}>
+              <input
+                type="color"
+                value={dashboardColor.startsWith('#') && dashboardColor.length === 7 ? dashboardColor : '#1c4ca2'}
+                onChange={e => setDashboardColor(e.target.value)}
+                style={{
+                  width: 28,
+                  height: 28,
+                  border: '1px solid var(--border)',
+                  borderRadius: 6,
+                  cursor: 'pointer',
+                  padding: 1,
+                  background: 'none'
+                }}
+                title="Pick Custom Color"
+              />
+              <Input
+                value={dashboardColor}
+                onChange={e => setDashboardColor(e.target.value)}
+                placeholder="#1c4ca2"
+                style={{ width: 88, height: 28, fontSize: 11, fontFamily: 'monospace' }}
+              />
+            </div>
+          </div>
+
+          {/* Mini Live Preview Bar */}
+          <div style={{
+            background: `linear-gradient(180deg, ${dashboardColor}ee 0%, ${dashboardColor}cc 100%)`,
+            border: '1px solid rgba(255,255,255,0.4)',
+            borderRadius: 6,
+            padding: '6px 12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            boxShadow: `0 4px 14px rgba(0,0,0,0.4), 0 0 10px ${dashboardColor}66`
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 10, color: '#fff', fontStyle: 'italic', fontWeight: 'bold' }}>
+                Preview: {tour?.title || 'Virtual Tour'}
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: 6, color: '#fff', fontSize: 10 }}>
+              <span>◀◀</span>
+              <span>🖼</span>
+              <span>‹</span>
+              <span>›</span>
+              <span>+</span>
+              <span>-</span>
+              <span>🥽</span>
+              <span>⛶</span>
+              <span>↓</span>
+              <span>▶▶</span>
             </div>
           </div>
         </div>

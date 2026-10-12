@@ -22,7 +22,9 @@ export default function HotspotPanel({
   onSelectSceneVisually,
   onSceneUpdate,
   viewerRef,
-  onTestAction
+  onTestAction,
+  onApplySizeToAll,
+  onApplyNameSizeToAll
 }) {
   const [form] = Form.useForm();
   const [currentType, setCurrentType] = useState('navigation');
@@ -33,6 +35,17 @@ export default function HotspotPanel({
   const [customUrlInput, setCustomUrlInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [activePanels, setActivePanels] = useState(['layout', 'actions', 'audio', 'styling', 'advanced']);
+  const [syncAllHotspotSize, setSyncAllHotspotSize] = useState(() => {
+    return localStorage.getItem('tour_sync_all_hotspot_size') === 'true';
+  });
+
+  const handleToggleSyncSize = (val) => {
+    setSyncAllHotspotSize(val);
+    localStorage.setItem('tour_sync_all_hotspot_size', String(val));
+    if (val && form.getFieldValue('size') && onApplySizeToAll) {
+      onApplySizeToAll(form.getFieldValue('size'), false);
+    }
+  };
 
   useEffect(() => {
     if (hotspot) {
@@ -156,6 +169,12 @@ export default function HotspotPanel({
       };
     }
     onUpdate(merged);
+    if (syncAllHotspotSize && changed.size !== undefined && onApplySizeToAll) {
+      onApplySizeToAll(changed.size, true);
+    }
+    if (syncAllHotspotSize && changed.nameSize !== undefined && onApplyNameSizeToAll) {
+      onApplyNameSizeToAll(changed.nameSize, true);
+    }
   };
 
   const handleTestAction = (hs) => {
@@ -294,6 +313,10 @@ export default function HotspotPanel({
                   form={form}
                   hotspot={hotspot}
                   matchesQuery={matchesQuery}
+                  onApplySizeToAll={onApplySizeToAll}
+                  onApplyNameSizeToAll={onApplyNameSizeToAll}
+                  syncAllHotspotSize={syncAllHotspotSize}
+                  onToggleSyncSize={handleToggleSyncSize}
                 />
               </Panel>
             )}
