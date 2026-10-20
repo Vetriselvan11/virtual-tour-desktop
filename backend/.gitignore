@@ -61,6 +61,7 @@ tours/*
 !tours/.gitkeep
 export/*
 !export/.gitkeep
+!export/*.js
 temp/
 tmp/
 test.zip

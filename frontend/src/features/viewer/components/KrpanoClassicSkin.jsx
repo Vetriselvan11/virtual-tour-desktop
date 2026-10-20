@@ -274,6 +274,34 @@ export default function KrpanoClassicSkin({
     }
   };
 
+  // Gyroscope / Device Motion (📱)
+  const [gyroSupported, setGyroSupported] = useState(false);
+  const [gyroEnabled, setGyroEnabled] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (typeof window !== 'undefined' && (window.DeviceOrientationEvent || window.DeviceMotionEvent)) {
+      if (isMounted) setGyroSupported(true);
+    }
+    if (viewerRef?.current?.isGyroEnabled) {
+      if (isMounted) setGyroEnabled(Boolean(viewerRef.current.isGyroEnabled()));
+    }
+    return () => { isMounted = false; };
+  }, [viewerRef]);
+
+  const handleToggleGyro = useCallback(async () => {
+    if (!gyroEnabled) {
+      const granted = await viewerRef?.current?.requestGyroPermission?.();
+      if (granted !== false) {
+        viewerRef?.current?.enableGyro?.();
+        setGyroEnabled(true);
+      }
+    } else {
+      viewerRef?.current?.disableGyro?.();
+      setGyroEnabled(false);
+    }
+  }, [viewerRef, gyroEnabled]);
+
   const getInitialThumbUrl = (sc) => {
     if (sc.thumbnail) return getImageUrl(sc.thumbnail);
     if (sc.preview) return getImageUrl(sc.preview);
@@ -650,6 +678,37 @@ export default function KrpanoClassicSkin({
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </button>
+
+            {/* ── GYROSCOPE BUTTON (📱 Device Motion / Tilt) ── */}
+            {gyroSupported && (
+              <button
+                onClick={handleToggleGyro}
+                title={gyroEnabled ? "Disable Gyroscope / Motion" : "Enable Gyroscope (Move device to look around)"}
+                style={{
+                  ...iconBtnStyle,
+                  color: gyroEnabled ? '#38bdf8' : '#ffffff',
+                  transform: gyroEnabled ? 'scale(1.1)' : 'scale(1)',
+                  filter: gyroEnabled ? 'drop-shadow(0 0 6px rgba(56, 189, 248, 0.9))' : 'none'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = '#38bdf8';
+                  e.currentTarget.style.transform = 'scale(1.15)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = gyroEnabled ? '#38bdf8' : '#ffffff';
+                  e.currentTarget.style.transform = gyroEnabled ? 'scale(1.1)' : 'scale(1)';
+                }}
+              >
+                {/* Phone / Compass Motion Gyro SVG Icon */}
+                <svg width={isSmallScreen ? "15" : "19"} height={isSmallScreen ? "15" : "19"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                  <line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2.8" />
+                  {gyroEnabled && (
+                    <path d="M2 12h2M20 12h2M12 2v2M12 20v2" strokeWidth="1.8" opacity="0.8" />
+                  )}
+                </svg>
+              </button>
+            )}
 
             {/* ── MARKED VR ICON (WebXR / Virtual Reality Mode) ── */}
             <button

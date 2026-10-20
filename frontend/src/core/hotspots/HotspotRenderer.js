@@ -56,7 +56,9 @@ export default class HotspotRenderer {
       const isSelected = this.selectedIds.has(hs.id);
       const isHovered = hs.id === this.hoveredId;
 
-      const { sprite, ring } = HotspotSprite.create(hs, isSelected, isHovered);
+      const { sprite, ring } = HotspotSprite.create(hs, isSelected, isHovered, () => {
+        if (this.renderLoop) this.renderLoop.requestRender(5);
+      });
 
       this.scene.add(sprite);
       if (ring) this.scene.add(ring);
@@ -97,7 +99,9 @@ export default class HotspotRenderer {
     
     const isSelected = this.selectedIds.has(updatedHs.id);
     const isHovered = updatedHs.id === this.hoveredId;
-    const { sprite, ring } = HotspotSprite.create(updatedHs, isSelected, isHovered);
+    const { sprite, ring } = HotspotSprite.create(updatedHs, isSelected, isHovered, () => {
+      if (this.renderLoop) this.renderLoop.requestRender(5);
+    });
 
     this.scene.add(sprite);
     if (ring) this.scene.add(ring);

@@ -153,6 +153,12 @@ app.use('/published', (req, res, next) => {
   }
 }));
 
+// Static file serving for shared public icons (e.g. chevron-blue.png)
+const frontendPublicIcons = path.resolve(__dirname, '../../../frontend/public/icons');
+if (fs.existsSync(frontendPublicIcons)) {
+  app.use('/icons', express.static(frontendPublicIcons));
+}
+
 // API Routes
 app.use('/api', appRoutes);
 

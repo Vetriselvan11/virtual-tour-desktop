@@ -15,9 +15,9 @@ export default class HotspotSprite {
    * @param {boolean} isHovered - Hover highlight state
    * @returns {Object} { sprite, ring } Three.js sprite meshes
    */
-  static create(hotspot, isSelected, isHovered) {
+  static create(hotspot, isSelected, isHovered, onUpdate) {
     // 1. Generate crisp high-resolution Canvas textures
-    const texture = HotspotIcons.createTexture(hotspot, isHovered, isSelected);
+    const texture = HotspotIcons.createTexture(hotspot, isHovered, isSelected, onUpdate);
     
     const app = hotspot.appearance || {};
     const opacity = app.opacity !== undefined ? app.opacity : (hotspot.opacity !== undefined ? hotspot.opacity : 0.9);

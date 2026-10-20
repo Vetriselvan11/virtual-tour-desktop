@@ -3,21 +3,69 @@ import { getImageUrl } from '../../services/http/httpClient';
 
 const imageCache = new Map();
 
-function resolveIconUrl(url) {
-  if (!url) return null;
-  
-  // Intercept old broken uploaded arrow icons and remap to local high-res arrow
-  if (url.includes('vtourskin_hotspot') || url.includes('chevron-blue')) {
-    return '/icons/chevron-blue.png';
+function resolveIconUrl(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== 'string') return null;
+  const url = rawUrl.trim();
+
+  // Inline data URI or blob
+  if (url.startsWith('data:') || url.startsWith('blob:')) {
+    return url;
   }
 
-  if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('blob:')) {
+  // Determine if running in standalone / exported package or subfolder deployment
+  const isStandalone = typeof window !== 'undefined' && Boolean(
+    window.__TOUR_CONFIG__ || 
+    window.location.protocol === 'file:' || 
+    (window.location.pathname && (
+      window.location.pathname.includes('/build/') || 
+      window.location.pathname.endsWith('.html') ||
+      window.location.pathname.endsWith('.htm')
+    ))
+  );
+
+  // Remap legacy or chevron-blue icons
+  if (url.includes('vtourskin_hotspot') || url.includes('chevron-blue')) {
+    if (isStandalone) {
+      if (url.startsWith('./assets/media/') || url.startsWith('assets/media/')) {
+        return url.startsWith('./') ? url : `./${url}`;
+      }
+      return './icons/chevron-blue.png';
+    }
+    const publicUrl = process.env.PUBLIC_URL || '';
+    return `${publicUrl}/icons/chevron-blue.png`.replace(/\/+/g, '/');
+  }
+
+  // Absolute external URLs
+  if (url.startsWith('http://') || url.startsWith('https://')) {
     return url;
   }
-  // If it's a frontend public icon, return as is (it will resolve relative to frontend)
-  if (url.startsWith('/icons/')) {
-    return url;
+
+  // Local public icons (/icons/...)
+  if (url.startsWith('/icons/') || url.startsWith('icons/')) {
+    const clean = url.startsWith('/') ? url.substring(1) : url;
+    if (isStandalone) {
+      return `./${clean}`;
+    }
+    const publicUrl = process.env.PUBLIC_URL || '';
+    return `${publicUrl}/${clean}`.replace(/\/+/g, '/');
   }
+
+  // Already relative path in exported tour (./assets/media/...)
+  if (url.startsWith('./assets/media/') || url.startsWith('assets/media/')) {
+    return url.startsWith('./') ? url : `./${url}`;
+  }
+
+  // Standalone mode general relative resolver
+  if (isStandalone) {
+    const clean = url.startsWith('/') ? url.substring(1) : url;
+    if (clean.startsWith('assets/')) return `./${clean}`;
+    if (clean.startsWith('uploads/')) {
+      const filename = clean.substring(clean.lastIndexOf('/') + 1);
+      return `./assets/media/${filename}`;
+    }
+    return clean.startsWith('./') ? clean : `./${clean}`;
+  }
+
   return getImageUrl ? getImageUrl(url) : url;
 }
 
@@ -39,6 +87,38 @@ function getOrLoadImage(rawUrl, onLoaded) {
   const entry = { img, loaded: false, callbacks: onLoaded ? [onLoaded] : [] };
   imageCache.set(url, entry);
 
+  // Derive candidate fallback URLs in case the icon is placed in an alternate folder
+  const filename = url.substring(Math.max(url.lastIndexOf('/'), url.lastIndexOf('\\')) + 1);
+  const fallbacks = [];
+  if (url.includes('chevron-blue')) {
+    fallbacks.push(
+      './icons/chevron-blue.png',
+      './assets/media/chevron-blue.png',
+      'icons/chevron-blue.png',
+      'assets/media/chevron-blue.png',
+      '/icons/chevron-blue.png'
+    );
+  } else if (filename && !url.startsWith('data:') && !url.startsWith('blob:')) {
+    fallbacks.push(
+      `./assets/media/${filename}`,
+      `./icons/${filename}`,
+      `assets/media/${filename}`,
+      `icons/${filename}`
+    );
+  }
+
+  let fallbackIdx = 0;
+  const tryNextFallback = () => {
+    while (fallbackIdx < fallbacks.length) {
+      const nextCandidate = fallbacks[fallbackIdx++];
+      if (nextCandidate && nextCandidate !== img.src && !img.src.endsWith(nextCandidate)) {
+        img.src = nextCandidate;
+        return true;
+      }
+    }
+    return false;
+  };
+
   img.onload = () => {
     entry.loaded = true;
     const cbs = entry.callbacks;
@@ -47,13 +127,25 @@ function getOrLoadImage(rawUrl, onLoaded) {
       try { cb(img); } catch (e) { console.error(e); }
     });
   };
+
   img.onerror = () => {
-    console.warn('Failed to load custom icon:', url);
+    if (tryNextFallback()) {
+      return; // Trying next candidate path
+    }
+    console.warn('[HotspotIcons] Failed to load custom icon:', url);
     entry.failed = true;
+    // Notify waiting callbacks with null to trigger visible fallback rendering
+    const cbs = entry.callbacks;
+    entry.callbacks = [];
+    cbs.forEach((cb) => {
+      try { cb(null); } catch (e) { console.error(e); }
+    });
   };
+
   img.src = url;
   return null;
 }
+
 
 const ringTextureCache = new Map();
 
@@ -68,9 +160,10 @@ export const HotspotIcons = {
    * @param {Object} hotspot - Hotspot configuration parameters
    * @param {boolean} isHovered - Hover highlight state
    * @param {boolean} isSelected - Active selection state
+   * @param {Function} [onUpdate] - Callback when async icon finishes loading
    * @returns {THREE.CanvasTexture} Texture asset loaded in memory
    */
-  createTexture: (hotspot, isHovered, isSelected) => {
+  createTexture: (hotspot, isHovered, isSelected, onUpdate) => {
     const DRAW_SIZE = 128;
     let CANVAS_SIZE = 256;
 
@@ -117,30 +210,24 @@ export const HotspotIcons = {
 
       if (isCustom && customIconUrl) {
         // --- FRAMELESS CUSTOM ICON MODE ---
-        // 1. Soft radial glow (Removed as per user request to remove background)
-        // const glowGrad = ctx.createRadialGradient(center, center, radius * 0.3, center, center, size / 2);
-        // glowGrad.addColorStop(0, color);
-        // glowGrad.addColorStop(0.4, color + '55');
-        // glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-        // ctx.fillStyle = glowGrad;
-        // ctx.beginPath();
-        // ctx.arc(center, center, size / 2, 0, Math.PI * 2);
-        // ctx.fill();
-
-        // 2. Selection ring removed as per user request
-
-        // 3. Draw custom image
         if (loadedImg) {
           const imgDim = size * 0.9;
           ctx.save();
           ctx.drawImage(loadedImg, (size - imgDim) / 2, (size - imgDim) / 2, imgDim, imgDim);
           ctx.restore();
         } else {
-          // Placeholder spinner/dot
+          // Visible placeholder arrow so hotspot is never invisible
           ctx.fillStyle = color;
           ctx.beginPath();
-          ctx.arc(center, center, radius * 0.6, 0, Math.PI * 2);
+          ctx.arc(center, center, radius * 0.7, 0, Math.PI * 2);
           ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(center - 10, center + 5);
+          ctx.lineTo(center, center - 6);
+          ctx.lineTo(center + 10, center + 5);
+          ctx.stroke();
         }
       } else {
         // --- BADGE MODE (Presets & Framed Custom Icons) ---
@@ -374,6 +461,9 @@ export const HotspotIcons = {
       }
 
       texture.needsUpdate = true;
+      if (onUpdate) {
+        try { onUpdate(); } catch (e) { console.error(e); }
+      }
     };
 
     if (isCustom && customIconUrl) {

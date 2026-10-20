@@ -1,0 +1,1780 @@
+<krpano version="1.21" title="Virtual Tour">
+
+	<include url="skin/vtourskin.xml" />
+
+	<layer 
+		name="skin_logo"
+		url="skin/Logo.png"
+		keep="true"
+		scale="0.13"          
+		align="topleft"
+		x="2%" y="2%"           
+		zorder="999"
+	/>
+	<layer 
+		name="mmw_logo"
+		url="skin/mmwLogo.png"
+		keep="true"
+		scale="0.6"          
+		align="topright"
+		x="2%" y="2%"           
+		zorder="999"
+	/>
+
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings maps="false"
+	               maps_type="google"
+	               maps_bing_api_key=""
+	               maps_google_api_key=""
+	               maps_zoombuttons="false"
+	               maps_loadonfirstuse="true"
+	               gyro="true"
+	               gyro_keeplookingdirection="true"
+	               webvr="true"
+	               webvr_keeplookingdirection="true"
+	               webvr_prev_next_hotspots="true"
+	               autotour="true"
+	               littleplanetintro="true"
+	               followmousecontrol="false"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="true"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_buttons="false"
+	               tooltips_thumbs="true"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               deeplinking="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+	               loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+	               loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+	               loadingtext=""
+	               layout_width="100%"
+	               layout_maxwidth="814"
+	               controlbar_width="-24"
+	               controlbar_height="40"
+	               controlbar_offset="20"
+	               controlbar_offset_closed="-40"
+	               controlbar_overlap.no-fractionalscaling="10"
+	               controlbar_overlap.fractionalscaling="0"
+	               design_skin_images="vtourskin_light.png"
+	               design_bgcolor="0x0F52BA"
+	               design_bgalpha="0.8"
+	               design_bgborder="1 0xFFFFFF 0.5"
+	               design_bgroundedge="10"
+	               design_bgshadow="0 4 10 0x000000 0.3"
+	               design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+	               design_thumbborder_padding="2"
+	               design_thumbborder_bgroundedge="5"
+	               design_text_css="color:#FFFFFF; font-family:Arial;"
+	               design_text_shadow="1"
+	               />
+
+	<!--
+	    For an alternative skin design either change the <skin_settings> values 
+	    from above or optionally include one of the predefined designs from below.
+	-->
+	<!-- <include url="skin/vtourskin_design_flat_light.xml"  /> -->
+	<!-- <include url="skin/vtourskin_design_glass.xml"       /> -->
+	<!-- <include url="skin/vtourskin_design_ultra_light.xml" /> -->
+	<!-- <include url="skin/vtourskin_design_117.xml"         /> -->
+	<!-- <include url="skin/vtourskin_design_117round.xml"    /> -->
+	<!-- <include url="skin/vtourskin_design_black.xml"       /> -->
+	
+
+	
+	<scene name="scene_001_(17)" title="Main Entrance " onstart="js(changeVideo(1))" thumburl="panos/001_(17).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-6.271" vlookat="-6.450" fovtype="MFOV" fov="97.019" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/001_(17).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/001_(17).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot  name="spot1" style="skin_hotspotstyle" ath="-8.052" atv="3.616" linkedscene="scene_4_(8)" linkedscene_lookat="376.01,9.36,120.0" />
+
+	</scene>
+
+	<scene name="scene_4_(8)" title="Main Entrance" onstart="js(changeVideo(2))" thumburl="panos/4_(8).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="375.804" vlookat="-1.507" fovtype="MFOV" fov="106.858" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(8).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(8).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="133.672" atv="11.292" linkedscene="scene_001_(17)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="8.662" atv="8.209" linkedscene="scene_1_(5)" linkedscene_lookat="541.91,6.08,120.0" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-71.773" atv="6.819" linkedscene="scene_4_(9)" linkedscene_lookat="-517.9,0.46,120.0" />
+
+	</scene>
+
+	<scene name="scene_1_(5)" title="Administration Block" onstart="js(hideVideo())" thumburl="panos/1_(5).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="542.528" vlookat="-3.803" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(5).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(5).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-178.090" atv="6.080" linkedscene="scene_1_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="3.299" atv="13.344" linkedscene="scene_1_(2)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-87.497" atv="13.441" linkedscene="scene_4_(8)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="77.748" atv="9.006" linkedscene="scene_4_(11)" linkedscene_lookat="-359.19,-1.79,120.0" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="98.969" atv="17.131" linkedscene="scene_3_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot6" style="skin_hotspotstyle" ath="115.365" atv="7.980" linkedscene="scene_5_(21)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(4)" title="Administration Block ground floor" onstart="js(changeVideo(3))" thumburl="panos/1_(4).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="455.243" vlookat="0.304" fovtype="MFOV" fov="95.677" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(4).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(4).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="179.883" atv="18.983" linkedscene="scene_1_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="29.235" atv="21.648" linkedscene="scene_1_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="64.157" atv="21.359" linkedscene="scene_1_(7)" linkedscene_lookat="191.6,7.63,120.0" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="95.502" atv="22.447" linkedscene="scene_1_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(12)" title="Fashion Institute of Technology" onstart="js(changeVideo(19))" thumburl="panos/1_(12).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="3.706" vlookat="0.412" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(12).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(12).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-84.934" atv="19.756" linkedscene="scene_1_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="80.952" atv="18.383" linkedscene="scene_1_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="103.017" atv="18.066" linkedscene="scene_1_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="4.368" atv="23.894" linkedscene="scene_1_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(13)" title="Fashion Institute of Technology" onstart="js(hideVideo())" thumburl="panos/1_(13).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(13).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(13).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="1.480" atv="23.778" linkedscene="scene_1_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-176.310" atv="24.883" linkedscene="scene_1_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(14)" title="Pattern Making Laboratory" onstart="js(changeVideo(18))" thumburl="panos/1_(14).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(14).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(14).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-177.055" atv="14.790" linkedscene="scene_1_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	<scene name="scene_1_(11)" title="Garment Construction Laboratory" onstart="js(changeVideo(17))" thumburl="panos/1_(11).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(11).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(11).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-179.361" atv="23.574" linkedscene="scene_1_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	<scene name="scene_1_(15)" title="Textile Wet Processing Laboratory" onstart="js(hideVideo())" thumburl="panos/1_(15).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(15).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(15).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-177.444" atv="31.892" linkedscene="scene_1_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="5.250" atv="37.061" linkedscene="scene_1_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(6)" title="Moot Court Hall" onstart="js(changeVideo(15))" thumburl="panos/1_(6).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="3.706" vlookat="0.206" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(6).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(6).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-176.888" atv="29.058" linkedscene="scene_1_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(7)" title="VOC Auditorium" onstart="js(hideVideo())" thumburl="panos/1_(7).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="363.657" vlookat="0.112" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(7).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(7).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="91.571" atv="22.704" linkedscene="scene_1_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(2)" title="Library Ground floor" onstart="js(changeVideo(16))" thumburl="panos/1_(2).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(2).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(2).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-106.980" atv="16.707" linkedscene="scene_1_(3)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-77.893" atv="17.640" linkedscene="scene_1_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(3)" title="Library 1st Floor" onstart="js(changeVideo(14))" thumburl="panos/1_(3).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(3).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(3).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="3.033" atv="27.346" linkedscene="scene_1_(2)" linkedscene_lookat="0.0,0.0,120.0" />
+
+	</scene>
+
+	<scene name="scene_4_(10)" title="MGR Statue" onstart="js(hideVideo())" thumburl="panos/4_(10).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(10).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(10).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="179.877" atv="17.508" linkedscene="scene_4_(9)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-1.212" atv="22.722" linkedscene="scene_4_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	
+	<scene name="scene_4_(9)" title="T Junction" onstart="js(hideVideo())" thumburl="panos/4_(9).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(9).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(9).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="143.354" atv="22.878" linkedscene="scene_4_(8)" linkedscene_lookat="0.0,0.0,120.0" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-141.587" atv="22.337" linkedscene="scene_4_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="20.221" atv="30.296" linkedscene="scene_4_(11)" linkedscene_lookat="-5.56,1.11,120.0" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-81.465" atv="19.572" linkedscene="scene_2_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(12)" title="Guest House" onstart="js(changeVideo(4))" thumburl="panos/4_(12).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(12).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(12).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="79.322" atv="9.057" linkedscene="scene_4_(13)" linkedscene_lookat="-53.08,-12.32,120.0" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-114.971" atv="8.881" linkedscene="scene_4_(9)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="160.167" atv="27.713" linkedscene="scene_2_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(10)" title="Basketball Ground " onstart="js(hideVideo())" thumburl="panos/2_(10).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="2.677" vlookat="-3.500" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(10).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(10).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-85.901" atv="21.214" linkedscene="scene_2_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="94.888" atv="20.370" linkedscene="scene_4_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(11)" title="Cricket Ground" onstart="js(changeVideo(21))" thumburl="panos/2_(11).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(11).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(11).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-101.590" atv="13.491" linkedscene="scene_2_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-1.130" atv="13.187" linkedscene="scene_5_(18)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-173.800" atv="16.689" linkedscene="scene_4_(9)" linkedscene_lookat="0.0,0.0,120.0" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="96.371" atv="13.794" linkedscene="scene_5_(17)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_4_(13)" title="MH-E[br]Men's Hostel-E Entrance" onstart="js(hideVideo())" thumburl="panos/4_(13).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(13).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(13).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-165.538" atv="9.667" linkedscene="scene_4_(12)" linkedscene_lookat="0.0,0.0,120.0" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-64.242" atv="17.592" linkedscene="scene_2_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="22.710" atv="18.762" linkedscene="scene_4_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="115.967" atv="14.174" linkedscene="scene_5_(18)" linkedscene_lookat="1.22,-7.1,131.52" />
+
+	</scene>
+
+	<scene name="scene_2_(6)" title="MH-E[br]Men's Hostel-E" onstart="js(hideVideo())" thumburl="panos/2_(6).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.105" vlookat="1.682" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(6).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(6).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="89.119" atv="14.209" linkedscene="scene_4_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-81.609" atv="23.895" linkedscene="scene_2_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-10.238" atv="13.497" linkedscene="scene_6_(2)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="10.104" atv="12.344" linkedscene="scene_6_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_6_(2)" title="MH-E[br]Men's Hostel-E Food" onstart="js(hideVideo())" thumburl="panos/6_(2).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="4.324" vlookat="1.030" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(2).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(2).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.069" atv="32.197" linkedscene="scene_2_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(4)" title="MH-E[br]Men's Hostel-E Room" onstart="js(hideVideo())" thumburl="panos/6_(4).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-86.632" vlookat="4.117" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(4).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(4).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-166.739" atv="46.251" linkedscene="scene_2_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_2_(5)" title="MH-D[br]Men's Hostel-D" onstart="js(changeVideo(7))" thumburl="panos/2_(5).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-8.647" vlookat="-5.765" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(5).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(5).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="78.516" atv="14.540" linkedscene="scene_2_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-91.933" atv="13.386" linkedscene="scene_4_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-17.052" atv="9.268" linkedscene="scene_6_(1)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="3.818" atv="8.841" linkedscene="scene_6_(3)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="-116.003" atv="12.972" linkedscene="scene_2_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_6_(1)" title="MH-D[br]Men's Hostel-D Food" onstart="js(hideVideo())" thumburl="panos/6_(1).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="1.647" vlookat="0.206" fovtype="MFOV" fov="106.966" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(1).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(1).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="2.878" atv="19.540" linkedscene="scene_2_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+	
+	<scene name="scene_6_(3)" title="MH-D[br]Men's Hostel-D Room" onstart="js(hideVideo())" thumburl="panos/6_(3).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="88.502" vlookat="5.351" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(3).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(3).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-60.051" atv="33.384" linkedscene="scene_2_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_2_(7)" title="MH-A[br]Men's Hostel-A" onstart="js(hideVideo())" thumburl="panos/2_(7).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="3.747" vlookat="-1.023" fovtype="MFOV" fov="115.777" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(7).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(7).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="101.773" atv="19.406" linkedscene="scene_4_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="3.969" atv="15.201" linkedscene="scene_6_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-94.016" atv="19.807" linkedscene="scene_2_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_6_(5)" title="MH-A[br]Men's Hostel-A Room" onstart="js(hideVideo())" thumburl="panos/6_(5).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-5.180" vlookat="6.224" fovtype="MFOV" fov="129.918" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(5).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(5).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-175.755" atv="40.192" linkedscene="scene_2_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_4_(14)" title="Gymkhana Restaurant" onstart="js(changeVideo(5))" thumburl="panos/4_(14).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(14).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(14).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-178.677" atv="12.428" linkedscene="scene_4_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-21.948" atv="16.744" linkedscene="scene_4_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="13.959" atv="14.138" linkedscene="scene_2_(8)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="50.389" atv="12.671" linkedscene="scene_2_(9)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="83.522" atv="10.034" linkedscene="scene_2_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot6" style="skin_hotspotstyle" ath="112.810" atv="10.297" linkedscene="scene_2_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(8)" title="Indoor Game" onstart="js(hideVideo())" thumburl="panos/2_(8).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="5.082" vlookat="5.996" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(8).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(8).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-36.139" atv="17.068" linkedscene="scene_4_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(9)" title="Gym" onstart="js(changeVideo(20))" thumburl="panos/2_(9).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(9).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(9).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-170.977" atv="30.223" linkedscene="scene_4_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(15)" title="Indian Bank ATM" onstart="js(changeVideo(26))" thumburl="panos/4_(15).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(15).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(15).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-14.171" atv="22.318" linkedscene="scene_5_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="81.421" atv="27.398" linkedscene="scene_2_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-102.313" atv="11.032" linkedscene="scene_4_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="157.336" atv="21.571" linkedscene="scene_5_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(12)" title="Physics Research laboratory (Advanced Materials Processing Laboratory)" onstart="js(hideVideo())" thumburl="panos/5_(12).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(12).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(12).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-84.608" atv="26.034" linkedscene="scene_4_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-176.078" atv="27.198" linkedscene="scene_5_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(13)" title="Central Instrumentation Fascility - SAS" onstart="js(hideVideo())" thumburl="panos/5_(13).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(13).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(13).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="71.222" atv="23.078" linkedscene="scene_5_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-110.970" atv="35.899" linkedscene="scene_5_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(14)" title="Wet Synthesis Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(14).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(14).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(14).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-121.427" atv="25.430" linkedscene="scene_5_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="169.916" atv="24.109" linkedscene="scene_4_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-96.606" atv="27.286" linkedscene="scene_5_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(15)" title="Laser Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(15).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(15).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(15).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="167.474" atv="38.434" linkedscene="scene_5_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(16)" title="North Square" onstart="js(changeVideo(6))" thumburl="panos/5_(16).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(16).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(16).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="89.769" atv="24.278" linkedscene="scene_5_(17)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-178.542" atv="33.044" linkedscene="scene_5_(18)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-87.991" atv="21.871" linkedscene="scene_4_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="5.247" atv="25.349" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	<scene name="scene_5_(18)" title="AB-1 Entrance" onstart="js(changeVideo(8))" thumburl="panos/5_(18).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(18).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(18).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-70.973" atv="18.634" linkedscene="scene_4_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="4.551" atv="11.306" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="134.511" atv="20.957" linkedscene="scene_5_(17)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-166.375" atv="19.874" linkedscene="scene_2_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	<scene name="scene_4_(6)" title="Amphitheatre AB1" onstart="js(hideVideo())" thumburl="panos/4_(6).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(6).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(6).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-69.001" atv="14.571" linkedscene="scene_5_(18)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-45.912" atv="16.759" linkedscene="scene_2_(1)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-32.431" atv="8.084" linkedscene="scene_1_(8)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-11.639" atv="22.119" linkedscene="scene_2_(3)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="3.151" atv="8.534" linkedscene="scene_2_(2)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot6" style="skin_hotspotstyle" ath="31.769" atv="10.136" linkedscene="scene_4_(1)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot7" style="skin_hotspotstyle" ath="46.528" atv="16.502" linkedscene="scene_3_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot8" style="skin_hotspotstyle" ath="178.708" atv="5.788" linkedscene="scene_4_(2)" linkedscene_lookat="0.0,0.0,120.0" />
+		<hotspot name="spot9" style="skin_hotspotstyle" ath="-156.032" atv="19.080" linkedscene="scene_5_(1)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot10" style="skin_hotspotstyle" ath="155.262" atv="19.113" linkedscene="scene_4_(3)" linkedscene_lookat="649.87,6.49,120.0" />
+		<hotspot name="spot11" style="skin_hotspotstyle" ath="-133.123" atv="14.990" linkedscene="scene_4_(4)" linkedscene_lookat="454.59,1.74,120.0" />
+		<hotspot name="spot12" style="skin_hotspotstyle" ath="135.220" atv="12.896" linkedscene="scene_4_(5)" linkedscene_lookat="356.13,2.05,120.0" />
+		<hotspot name="spot13" style="skin_hotspotstyle" ath="117.147" atv="19.412" linkedscene="scene_2_(4)" linkedscene_lookat="0.0,0.0,120.0" />
+		<hotspot name="spot14" style="skin_hotspotstyle" ath="175.366" atv="41.657" linkedscene="scene_3_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(1)" title="Analog Electronics Circuits Hardware Laboratory" onstart="js(hideVideo())" thumburl="panos/2_(1).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(1).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(1).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="1.490" atv="25.151" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(2)" title="Analog Electronics Circuits Laboratory" onstart="js(hideVideo())" thumburl="panos/2_(2).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="1.235" vlookat="5.763" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(2).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(2).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="2.300" atv="27.185" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(3)" title="Geo Science Research Laboratory" onstart="js(hideVideo())" thumburl="panos/2_(3).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="5.559" vlookat="0.618" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(3).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(3).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-89.305" atv="30.585" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(4)" title="Strength of Materials Laboratory" onstart="js(hideVideo())" thumburl="panos/2_(4).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(4).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(4).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-86.349" atv="36.396" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_1_(8)" title="Nethaji Auditorium" onstart="js(changeVideo(9))" thumburl="panos/1_(8).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="4.530" vlookat="0.000" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(8).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(8).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="3.009" atv="20.017" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(1)" title="Control Systems Laboratory" onstart="js(changeVideo(31))" thumburl="panos/4_(1).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(1).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(1).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="91.819" atv="27.951" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(11)" title="Engineering Physics Laboratory" onstart="js(hideVideo())" thumburl="panos/3_(11).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(11).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(11).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-174.446" atv="24.574" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(12)" title="Engineering Chemistry Laboratory" onstart="js(hideVideo())" thumburl="panos/3_(12).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(12).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(12).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="98.186" atv="22.764" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(5)" title="Software Engineering Laboratory" onstart="js(changeVideo(23))" thumburl="panos/4_(5).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(5).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(5).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.494" atv="22.976" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(3)" title="Centre for E-Automation Mechatronics Laboratory" onstart="js(hideVideo())" thumburl="panos/4_(3).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(3).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(3).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-111.445" atv="17.092" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(2)" title="Power Electronics Laboratory" onstart="js(changeVideo(30))" thumburl="panos/4_(2).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(2).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(2).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-95.132" atv="24.671" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(4)" title="Smart Grid Laboratory" onstart="js(changeVideo(32))" thumburl="panos/4_(4).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(4).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(4).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-86.284" atv="25.642" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(1)" title="Automobile Engineering Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(1).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(1).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(1).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-17.266" atv="19.280" linkedscene="scene_4_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(17)" title="AB-3 Entrance " onstart="js(hideVideo())" thumburl="panos/5_(17).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(17).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(17).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="35.741" atv="11.936" linkedscene="scene_5_(18)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-45.527" atv="12.702" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="132.728" atv="17.659" linkedscene="scene_5_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-121.877" atv="18.754" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(7)" title="Amphitheatre AB3" onstart="js(changeVideo(27))" thumburl="panos/4_(7).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(7).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(7).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-152.110" atv="12.433" linkedscene="scene_5_(17)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="53.898" atv="15.222" linkedscene="scene_5_(2)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-104.164" atv="4.728" linkedscene="scene_3_(1)" linkedscene_lookat="0.0,0.0,120.0" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-94.543" atv="17.656" linkedscene="scene_3_(2)" linkedscene_lookat="9.21,1.27,120.0" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="167.348" atv="10.021" linkedscene="scene_3_(3)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot6" style="skin_hotspotstyle" ath="142.389" atv="15.217" linkedscene="scene_3_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot7" style="skin_hotspotstyle" ath="117.534" atv="6.774" linkedscene="scene_3_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot8" style="skin_hotspotstyle" ath="-84.043" atv="3.644" linkedscene="scene_3_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot9" style="skin_hotspotstyle" ath="-67.150" atv="5.005" linkedscene="scene_3_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot10" style="skin_hotspotstyle" ath="74.603" atv="5.050" linkedscene="scene_3_(8)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot11" style="skin_hotspotstyle" ath="95.382" atv="14.132" linkedscene="scene_3_(9)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot12" style="skin_hotspotstyle" ath="-73.956" atv="20.451" linkedscene="scene_6_(17)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot13" style="skin_hotspotstyle" ath="-20.306" atv="21.854" linkedscene="scene_6_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot14" style="skin_hotspotstyle" ath="-27.951" atv="7.252" linkedscene="scene_6_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot15" style="skin_hotspotstyle" ath="-49.076" atv="25.087" linkedscene="scene_6_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot16" style="skin_hotspotstyle" ath="-50.118" atv="7.635" linkedscene="scene_6_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot17" style="skin_hotspotstyle" ath="-116.017" atv="13.196" linkedscene="scene_1_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(1)" title="The Noise Vibration And Harshness Laboratory" onstart="js(hideVideo())" thumburl="panos/3_(1).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(1).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(1).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="1.149" atv="36.282" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(2)" title="Electric and Hybrid Vehicle Laboratory" onstart="js(hideVideo())" thumburl="panos/3_(2).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(2).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(2).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-163.161" atv="26.963" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(6)" title="Samsung Seed Laboratory" onstart="js(hideVideo())" thumburl="panos/3_(6).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(6).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(6).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-86.121" atv="20.830" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(7)" title="5G Laboratory" onstart="js(hideVideo())" thumburl="panos/3_(7).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(7).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(7).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="110.248" atv="30.953" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(3)" title="Cyber Physical System Laboratory (CPS)" onstart="js(hideVideo())" thumburl="panos/3_(3).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(3).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(3).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-84.878" atv="25.197" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(4)" title="Strategic Machine Automation and Robotic Technology Solutions Laboratory (SMARTS)" onstart="js(hideVideo())" thumburl="panos/3_(4).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(4).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(4).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="4.004" atv="28.306" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(5)" title="Robotics Modelling, Simulation and Programming Laboratory (RMSPRO)" onstart="js(hideVideo())" thumburl="panos/3_(5).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(5).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(5).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="5.592" atv="28.119" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(2)" title="Advanced Drone Automation And Precision Technology Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(2).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(2).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(2).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-177.999" atv="25.692" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(8)" title="Centre For Smart Grid Technologies" onstart="js(hideVideo())" thumburl="panos/3_(8).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(8).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(8).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-81.698" atv="10.291" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_3_(9)" title="Centre For Cyber Physical Systems" onstart="js(hideVideo())" thumburl="panos/3_(9).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(9).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(9).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+	</scene>
+
+	<scene name="scene_1_(10)" title="Kamaraj Auditorium " onstart="js(changeVideo(11))" thumburl="panos/1_(10).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="4.529" vlookat="0.206" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1_(10).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/1_(10).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="3.568" atv="24.350" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	<scene name="scene_6_(6)" title="Fist Lab01" onstart="js(hideVideo())" thumburl="panos/6_(6).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="1.648" vlookat="0.206" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(6).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(6).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="114.487" atv="39.543" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(7)" title="Fist Lab02" onstart="js(hideVideo())" thumburl="panos/6_(7).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-361.400" vlookat="8.192" fovtype="MFOV" fov="106.930" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(7).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(7).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-120.475" atv="32.678" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(17)" title="Class Room" onstart="js(hideVideo())" thumburl="panos/6_(17).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="182.256" vlookat="1.235" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(17).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(17).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="4.179" atv="24.293" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(14)" title="Neuro Science Laboratory" onstart="js(hideVideo())" thumburl="panos/6_(14).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-363.789" vlookat="19.805" fovtype="MFOV" fov="106.944" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(14).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(14).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-118.981" atv="51.107" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(15)" title="Center For Healthcare" onstart="js(hideVideo())" thumburl="panos/6_(15).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="3.451" vlookat="0.847" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(15).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(15).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="100.633" atv="18.076" linkedscene="scene_4_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_5_(20)" title="AB-2 Entrance" onstart="js(hideVideo())" thumburl="panos/5_(20).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-2.989" vlookat="2.169" fovtype="MFOV" fov="119.699" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(20).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(20).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="86.735" atv="11.392" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-84.105" atv="10.337" linkedscene="scene_2_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-1.988" atv="4.375" linkedscene="scene_5_(4)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="19.759" atv="7.653" linkedscene="scene_5_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="-19.158" atv="6.589" linkedscene="scene_5_(6)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot6" style="skin_hotspotstyle" ath="-32.817" atv="17.002" linkedscene="scene_5_(7)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot7" style="skin_hotspotstyle" ath="36.345" atv="15.995" linkedscene="scene_5_(8)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot8" style="skin_hotspotstyle" ath="-1.799" atv="17.455" linkedscene="scene_5_(9)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		
+		<hotspot name="spot10" style="skin_hotspotstyle" ath="52.650" atv="11.948" linkedscene="scene_5_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot11" style="skin_hotspotstyle" ath="-59.539" atv="12.857" linkedscene="scene_5_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot9" style="skin_hotspotstyle" ath="41.559" atv="3.547" linkedscene="scene_6_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot12" style="skin_hotspotstyle" ath="-44.000" atv="3.028" linkedscene="scene_4_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	
+	<scene name="scene_5_(4)" title="Advanced Manufacturing Technology Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(4).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="18.323" vlookat="2.471" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(4).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(4).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-158.351" atv="26.263" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(5)" title="Microwave And Antenna Measurement Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(5).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(5).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(5).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-177.856" atv="30.326" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(6)" title="Anechoic Chamber" onstart="js(hideVideo())" thumburl="panos/5_(6).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-86.023" vlookat="11.321" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(6).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(6).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="140.613" atv="38.653" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(7)" title="High Resolution Scanning Electron Microscope" onstart="js(hideVideo())" thumburl="panos/5_(7).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="2.471" vlookat="0.000" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(7).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(7).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-174.667" atv="28.329" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(8)" title="X-ray Diffractometer" onstart="js(hideVideo())" thumburl="panos/5_(8).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(8).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(8).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="94.838" atv="39.647" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(9)" title="Advanced Electrical Drives Laboratory" onstart="js(changeVideo(29))" thumburl="panos/5_(9).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(9).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(9).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />mic
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-53.133" atv="29.449" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(16)" title="Career Development Centre" onstart="js(hideVideo())" thumburl="panos/4_(16).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(16).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(16).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="3.253" atv="16.859" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(10)" title="Micro And Nano Devices Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(10).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(10).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(10).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-83.271" atv="33.191" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_5_(11)" title="Aerodynamics Laboratory" onstart="js(hideVideo())" thumburl="panos/5_(11).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(11).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(11).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="95.023" atv="25.997" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_6_(16)" title="AB2_Smart Class Room" onstart="js(hideVideo())" thumburl="panos/6_(16).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="3.912" vlookat="1.235" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(16).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(16).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="95.062" atv="15.272" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_2_(14)" title="LH-C[br]Ladies Hostel-C point" onstart="js(hideVideo())" thumburl="panos/2_(14).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(14).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(14).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="125.291" atv="7.994" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="148.817" atv="8.416" linkedscene="scene_4_(15)" linkedscene_lookat="-896.54,-7.71,120.0" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="55.117" atv="9.594" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-81.923" atv="12.496" linkedscene="scene_2_(17)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="-28.157" atv="11.458" linkedscene="scene_2_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot6" style="skin_hotspotstyle" ath="-105.924" atv="11.160" linkedscene="scene_2_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(17)" title="VIT - SEDAXIS" onstart="js(changeVideo(12))" thumburl="panos/2_(17).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="3.088" vlookat="0.000" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(17).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(17).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-88.179" atv="34.311" linkedscene="scene_2_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_2_(15)" title="LH-C[br]Ladies Hostel-C" onstart="js(hideVideo())" thumburl="panos/2_(15).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="2.265" vlookat="-3.294" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(15).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(15).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="3.052" atv="19.226" linkedscene="scene_2_(40)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="103.726" atv="13.334" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-175.439" atv="23.496" linkedscene="scene_2_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	
+	<scene name="scene_2_(40)" title="LH-C[br]Ladies Hostel-C Inside View" onstart="js(hideVideo())" thumburl="panos/2_(16).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="7.264" vlookat="3.798" fovtype="MFOV" fov="117.758" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(16).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(16).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-171.099" atv="32.596" linkedscene="scene_2_(15)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="99.263" atv="15.621" linkedscene="scene_6_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="4.609" atv="19.479" linkedscene="scene_6_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		
+
+	</scene>
+
+	<scene name="scene_6_(11)" title="LH-C[br]Ladies Hostel-C Room" onstart="js(hideVideo())" thumburl="panos/6_(11).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.824" vlookat="-2.265" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(11).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(11).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="175.295" atv="29.362" linkedscene="scene_2_(40)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(12)" title="LH-C[br]Ladies Hostel-C Food" onstart="js(hideVideo())" thumburl="panos/6_(12).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="5.147" vlookat="-1.441" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(12).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(12).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-178.909" atv="25.250" linkedscene="scene_2_(40)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_2_(16)" title="MH-F[br]Men's Hostel-F" onstart="js(hideVideo())" thumburl="panos/2_(16).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="7.661" vlookat="1.029" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(16).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(16).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-171.099" atv="32.596" linkedscene="scene_2_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-27.560" atv="17.014" linkedscene="scene_6_(8)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="99.263" atv="15.621" linkedscene="scene_6_(13)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="4.609" atv="19.479" linkedscene="scene_6_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="36.924" atv="16.675" linkedscene="scene_6_(9)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_6_(8)" title="MH-F[br]Men's Hostel-F Room(3 Bedroom)" onstart="js(hideVideo())" thumburl="panos/6_(8).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="2.471" vlookat="0.206" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(8).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(8).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-175.252" atv="25.204" linkedscene="scene_2_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(13)" title="MH-F[br]Men's Hostel-F Food" onstart="js(hideVideo())" thumburl="panos/6_(13).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="96.427" vlookat="0.205" fovtype="MFOV" fov="111.461" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(13).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(13).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="4.440" atv="14.797" linkedscene="scene_2_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(9)" title="MH-F[br]Men's Hostel-F Room (4 Bedroom)" onstart="js(hideVideo())" thumburl="panos/6_(9).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="1.441" vlookat="-0.206" fovtype="MFOV" fov="106.958" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(9).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(9).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-176.947" atv="18.962" linkedscene="scene_2_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_6_(10)" title="MH-F[br]Men's Hostel-F Room(2 Bedroom)" onstart="js(hideVideo())" thumburl="panos/6_(10).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="1.271" vlookat="7.776" fovtype="MFOV" fov="122.251" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(10).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(10).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-178.661" atv="35.517" linkedscene="scene_2_(16)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_2_(13)" title="LH-B[br]Ladies Hostel-B" onstart="js(hideVideo())" thumburl="panos/2_(13).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(13).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(13).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="101.976" atv="15.874" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+    <scene name="scene_2_(12)" title="Aavin Junction" onstart="js(changeVideo(25))" thumburl="panos/2_(12).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2_(12).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/2_(12).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-23.847" atv="8.263" linkedscene="scene_2_(14)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="5.995" atv="5.761" linkedscene="scene_2_(13)" linkedscene_lookat="-351.28,1.11,120.0" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="48.532" atv="8.627" linkedscene="scene_5_(19)" linkedscene_lookat="360.89,12.54,120.0" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="157.728" atv="10.234" linkedscene="scene_4_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot5" style="skin_hotspotstyle" ath="-103.671" atv="11.382" linkedscene="scene_5_(20)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot6" style="skin_hotspotstyle" ath="106.283" atv="17.673" linkedscene="scene_5_(3)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot7" style="skin_hotspotstyle" ath="-161.174" atv="10.386" linkedscene="scene_2_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	<scene name="scene_5_(19)" title="Health Center" onstart="js(changeVideo(13))" thumburl="panos/5_(19).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="363.216" vlookat="-0.981" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(19).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(19).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-36.673" atv="24.738" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	
+	<scene name="scene_5_(3)" title="Swimming Pool" onstart="js(changeVideo(24))" thumburl="panos/5_(3).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="-6.794" vlookat="1.235" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(3).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(3).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="172.763" atv="24.833" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_4_(11)" title="Clock Court" onstart="js(hideVideo())" thumburl="panos/4_(11).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4_(11).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/4_(11).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="64.204" atv="13.094" linkedscene="scene_3_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="154.001" atv="9.694" linkedscene="scene_1_(5)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-0.114" atv="12.731" linkedscene="scene_2_(12)" linkedscene_hoffset="0.0" use3dtransition="true" />
+		<hotspot name="spot4" style="skin_hotspotstyle" ath="-146.215" atv="11.553" linkedscene="scene_4_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+	
+	<scene name="scene_3_(10)" title="Mahatma Gandhi Auditorium" onstart="js(changeVideo(10))" thumburl="panos/3_(10).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.206" vlookat="2.059" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3_(10).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/3_(10).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,640,1280,2560" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-2.408" atv="31.832" linkedscene="scene_4_(11)" linkedscene_lookat="0.0,0.0,120.0" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-1.225" atv="17.825" linkedscene="scene_6_(18)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_6_(18)" title="Badminton Court" onstart="js(hideVideo())" thumburl="panos/6_(18).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="3.706" vlookat="0.000" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/6_(18).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/6_(18).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-179.326" atv="25.238" linkedscene="scene_3_(10)" linkedscene_hoffset="0.0" use3dtransition="true" />
+	</scene>
+
+	<scene name="scene_5_(21)" title="Gate 2 Entrance" onstart="js(hideVideo())" thumburl="panos/5_(21).tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="14.824" vlookat="0.206" fovtype="MFOV" fov="120.000" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5_(21).tiles/preview.jpg" />
+
+		<image>
+			<cube url="panos/5_(21).tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg" multires="512,768,1536,2816" />
+		</image>
+
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="11.619" atv="10.669" linkedscene="scene_4_(11)" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	
+
+</krpano>

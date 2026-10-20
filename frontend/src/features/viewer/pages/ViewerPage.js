@@ -563,8 +563,8 @@ export default function ViewerPage() {
         zIndex: 10,
         gap: 8,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          {tour.clientLogo ? (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {tour.clientLogo && (
             <div
               onClick={() => tour.clientUrl && window.open(tour.clientUrl, '_blank')}
               style={{
@@ -578,41 +578,16 @@ export default function ViewerPage() {
                 src={getImageUrl(tour.clientLogo)} 
                 alt="Client Logo" 
                 style={{
-                  height: isMobile ? 28 : 38,
+                  height: isMobile ? 32 : 46,
                   width: 'auto',
-                  maxWidth: isMobile ? 90 : 160,
+                  maxWidth: isMobile ? 140 : 220,
                   objectFit: 'contain',
                   filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.6))',
                   borderRadius: '4px'
                 }}
               />
             </div>
-          ) : (
-            <div style={{
-              width: 36,
-              height: 36,
-              borderRadius: '8px',
-              background: 'rgba(255, 255, 255, 0.08)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
-            }}>
-              <Icon name="Building" size="sm" style={{ color: 'rgba(240, 238, 255, 0.75)' }} />
-            </div>
           )}
-          <div style={{ minWidth: 0, flex: isMobile ? '1 1 auto' : 'none', overflow: 'hidden' }}>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: isMobile ? 13 : 20, color: '#f0eeff', letterSpacing: '0.02em', textShadow: '0 2px 10px rgba(0,0,0,0.5)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {tour.title}
-            </div>
-            {currentScene && !isMobile && (
-              <div style={{ fontSize: 12, color: 'rgba(240,238,255,0.55)', marginTop: 4, fontFamily: "'DM Sans', sans-serif", textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
-                {currentScene.name || currentScene.id}
-              </div>
-            )}
-          </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 16, flexShrink: 0 }}>
           <a
