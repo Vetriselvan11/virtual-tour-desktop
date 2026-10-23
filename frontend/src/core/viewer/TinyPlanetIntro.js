@@ -111,24 +111,14 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 finalColor = texColor.rgb;
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 5. ATMOSPHERIC RIM GLOW & CLEAN SPACE BACKGROUND
+    // 5. NATURAL SPACE BACKGROUND (NO ARTIFICIAL BLUE COLOR SHADE)
     // ──────────────────────────────────────────────────────────────────────────
     float rHorizon = 2.0 * effectiveScale;
 
     if (uAtmosphere > 0.001 && uWarp > 0.05) {
-      float distNorm = (r - rHorizon) / max(0.01, rHorizon);
-
-      // Soft rim halo along the spherical planet edge
-      float rimGlow = exp(-abs(distNorm) * 6.5) * 0.9 * uAtmosphere;
-
-      // Soft outer aura radiating into space
-      float outerHalo = exp(-max(0.0, distNorm) * 2.8) * 0.5 * uAtmosphere;
-
-      // Clean cosmic background fade beyond outer atmosphere
+      // Clean cosmic background fade beyond outer planet boundary
       float spaceFactor = smoothstep(1.05, 2.4, r / max(0.01, rHorizon)) * uAtmosphere;
-
-      vec3 glow = uAtmosphereColor * (rimGlow + outerHalo);
-      finalColor = mix(finalColor + glow, uBgColor, spaceFactor * 0.35);
+      finalColor = mix(finalColor, uBgColor, spaceFactor * 0.35);
     }
 
     gl_FragColor = vec4(finalColor, uOpacity);
@@ -177,7 +167,7 @@ export default class TinyPlanetIntro {
       uYaw: { value: 0.0 },
       uFov: { value: 108 * (Math.PI / 180) },
       uAtmosphere: { value: 1.0 },
-      uAtmosphereColor: { value: new THREE.Vector3(0.42, 0.68, 1.0) },
+      uAtmosphereColor: { value: new THREE.Vector3(0.0, 0.0, 0.0) },
       uBgColor: { value: new THREE.Vector3(0.02, 0.02, 0.035) },
       uOpacity: { value: 1.0 }
     };

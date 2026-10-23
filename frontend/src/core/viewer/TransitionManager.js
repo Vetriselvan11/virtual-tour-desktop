@@ -9,22 +9,23 @@ export default class TransitionManager {
   }
 
   /**
-   * Cancels any in-flight transitions and resets sphere material to full opacity.
-   * @param {THREE.Mesh} [sphere] - Optional sphere mesh to ensure opacity is reset
+   * Cancels any in-flight transitions and optionally resets sphere material opacity.
+   * @param {THREE.Mesh} [sphere] - Optional sphere mesh
+   * @param {number|null} [resetOpacity=null] - Opacity to set on cancel, or null to preserve current
    */
-  cancelActive(sphere) {
+  cancelActive(sphere, resetOpacity = null) {
     for (const hookId of this.activeHooks) {
       this.renderLoop.unregisterHook(hookId);
       this.renderLoop.setContinuousDemand(hookId, false);
     }
     this.activeHooks.clear();
-    if (sphere && sphere.material) {
-      sphere.material.opacity = 1;
+    if (sphere && sphere.material && resetOpacity !== null) {
+      sphere.material.opacity = resetOpacity;
     }
   }
 
   /**
-   * Smoothly interpolates the panorama sphere opacity.
+   * Smoothly interpolates the panorama sphere opacity using Hermite smoothstep.
    * @param {THREE.Mesh} sphere - The background panorama sphere mesh
    * @param {number} targetOpacity - Target opacity level (0 to 1)
    * @param {number} durationSeconds - Fade duration in seconds
@@ -45,8 +46,15 @@ export default class TransitionManager {
 
     const startOpacity = sphere.material.opacity;
     const deltaOpacity = targetOpacity - startOpacity;
-    let elapsed = 0;
 
+    if (Math.abs(deltaOpacity) < 0.005) {
+      sphere.material.opacity = targetOpacity;
+      this.renderLoop.requestRender(2);
+      if (onComplete) onComplete();
+      return;
+    }
+
+    let elapsed = 0;
     const hookId = `transition_fade_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
     this.activeHooks.add(hookId);
     this.renderLoop.setContinuousDemand(hookId, true);
@@ -54,12 +62,15 @@ export default class TransitionManager {
     // Register transition fader ticker hook in render loop
     this.renderLoop.registerHook(hookId, (time, delta) => {
       elapsed += delta;
-      const progress = Math.min(1, elapsed / durationSeconds);
+      const t = Math.min(1, elapsed / durationSeconds);
+      // Hermite smoothstep for natural, silky smooth acceleration and deceleration
+      const progress = t * t * (3.0 - 2.0 * t);
 
       // Interpolate opacity in WebGL space
       sphere.material.opacity = startOpacity + deltaOpacity * progress;
 
-      if (progress >= 1) {
+      if (t >= 1) {
+        sphere.material.opacity = targetOpacity;
         // Complete, clean up loop ticker
         this.activeHooks.delete(hookId);
         this.renderLoop.unregisterHook(hookId);

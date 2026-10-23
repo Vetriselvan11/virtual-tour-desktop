@@ -27,13 +27,7 @@ class StandalonePlayer {
     const sceneConfig = this.config.scenes.find(s => s.id === sceneId);
     if (!sceneConfig) return;
     
-    this.viewer.transitionManager.startTransition(sceneConfig.image, {
-      fadeOut: 400,
-      fadeIn: 400
-    }).then(() => {
-      this.viewer.hotspotManager.loadHotspots(sceneConfig.hotspots || []);
-      // If we had object3d manager, load objects here too
-    });
+    this.viewer.sceneManager.loadScene(sceneConfig, sceneConfig.hotspots || []);
   }
 
   setupUI() {

@@ -71,7 +71,8 @@ export default function KrpanoClassicSkin({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const effectiveIsMobile = isMobile || windowWidth < 640;
+  const effectiveIsMobile = isMobile || windowWidth < 680;
+  const isTablet = windowWidth >= 680 && windowWidth < 1024;
   const isSmallScreen = windowWidth < 460;
   const isUltraSmall = windowWidth < 380;
 
@@ -312,15 +313,19 @@ export default function KrpanoClassicSkin({
   return (
     <>
       <div
+        className="krpano-skin"
         style={{
-          position: 'absolute',
-          bottom: effectiveIsMobile ? '6px' : '12px',
+          position: 'fixed',
+          bottom: `calc(${effectiveIsMobile ? '10px' : '14px'} + env(safe-area-inset-bottom, 0px))`,
           left: '50%',
           transform: isHidden
-            ? 'translateX(-50%) translateY(calc(100% + 50px))'
+            ? 'translateX(-50%) translateY(calc(100% + 70px))'
             : 'translateX(-50%) translateY(0)',
-          width: effectiveIsMobile ? 'calc(100vw - 10px)' : 'calc(100vw - 40px)',
-          maxWidth: '860px',
+          width: effectiveIsMobile ? 'calc(100% - 12px)' : isTablet ? 'calc(100% - 24px)' : 'calc(100% - 40px)',
+          maxWidth: isTablet ? '720px' : '860px',
+          boxSizing: 'border-box',
+          paddingLeft: 'env(safe-area-inset-left, 0px)',
+          paddingRight: 'env(safe-area-inset-right, 0px)',
           zIndex: 1000,
           display: 'flex',
           flexDirection: 'column',
@@ -368,6 +373,7 @@ export default function KrpanoClassicSkin({
           <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center' }}>
             {/* Left Scroll Arrow Button */}
             <button
+              className="krpano-btn"
               onClick={() => scrollByAmount(-220)}
               onMouseDown={() => startScrollHold(-220)}
               onMouseUp={stopScrollHold}
@@ -409,6 +415,8 @@ export default function KrpanoClassicSkin({
                 scrollBehavior: isDragging ? 'auto' : 'smooth',
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch',
+                touchAction: 'pan-x',
                 width: '100%',
                 cursor: isDragging ? 'grabbing' : 'grab',
                 userSelect: 'none'
@@ -462,6 +470,8 @@ export default function KrpanoClassicSkin({
                         src={thumbUrl}
                         alt={sceneName}
                         draggable={false}
+                        loading="lazy"
+                        decoding="async"
                         style={{
                           width: '100%',
                           height: '100%',
@@ -515,6 +525,7 @@ export default function KrpanoClassicSkin({
 
             {/* Right Scroll Arrow Button */}
             <button
+              className="krpano-btn"
               onClick={() => scrollByAmount(220)}
               onMouseDown={() => startScrollHold(220)}
               onMouseUp={stopScrollHold}
@@ -548,18 +559,21 @@ export default function KrpanoClassicSkin({
 
         {/* ── Compact Bottom Icon Control Bar ── */}
         <div style={{
-          height: isSmallScreen ? '30px' : effectiveIsMobile ? '32px' : '36px',
-          padding: isUltraSmall ? '0 2px' : effectiveIsMobile ? '0 6px' : '0 12px',
+          height: isSmallScreen ? '32px' : effectiveIsMobile ? '34px' : '36px',
+          padding: isUltraSmall ? '0 4px' : effectiveIsMobile ? '0 8px' : '0 12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           borderTop: thumbsOpen ? '1px solid rgba(255, 255, 255, 0.22)' : 'none',
-          background: theme.barBg
+          background: theme.barBg,
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           {/* Left Group: [<<] [All Images / Gallery Search Modal Toggle] */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: isUltraSmall ? '2px' : effectiveIsMobile ? '5px' : '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isUltraSmall ? '3px' : effectiveIsMobile ? '6px' : '10px', flexShrink: 0, minWidth: 0 }}>
             {/* Previous Scene Button [<<] */}
             <button
+              className="krpano-btn"
               onClick={goToPrevScene}
               title="Previous Scene"
               style={iconBtnStyle}
@@ -571,6 +585,7 @@ export default function KrpanoClassicSkin({
 
             {/* Overall Images Gallery & Search Bar Toggle Icon */}
             <button
+              className="krpano-btn"
               onClick={() => setShowGalleryModal(prev => !prev)}
               title="Show All Images & Search (Gallery)"
               style={{
@@ -594,75 +609,85 @@ export default function KrpanoClassicSkin({
             </button>
           </div>
 
-          {/* Center Group: [<] [>] [^] [v] [+] [-] [VR GOGGLES] */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: isUltraSmall ? '2px' : isSmallScreen ? '4px' : effectiveIsMobile ? '6px' : '11px' }}>
-            {/* Pan Left [<] */}
-            <button
-              onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(-0.045, 0))}
-              onMouseUp={stopHoldAction}
-              onMouseLeave={stopHoldAction}
-              onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(-0.045, 0))}
-              onTouchEnd={stopHoldAction}
-              title="Look Left"
-              style={iconBtnStyle}
-            >
-              <svg width={isSmallScreen ? "13" : "16"} height={isSmallScreen ? "13" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
+          {/* Center Group: Adaptive Pan & Zoom Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: isUltraSmall ? '3px' : isSmallScreen ? '5px' : effectiveIsMobile ? '7px' : '11px', flexShrink: 0, minWidth: 0 }}>
+            {/* Pan controls: Shown on desktop/tablet viewports; mobile devices use natural direct touch drag */}
+            {!effectiveIsMobile && (
+              <>
+                {/* Pan Left [<] */}
+                <button
+                  className="krpano-btn"
+                  onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(-0.045, 0))}
+                  onMouseUp={stopHoldAction}
+                  onMouseLeave={stopHoldAction}
+                  onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(-0.045, 0))}
+                  onTouchEnd={stopHoldAction}
+                  title="Look Left"
+                  style={iconBtnStyle}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
 
-            {/* Pan Right [>] */}
-            <button
-              onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(0.045, 0))}
-              onMouseUp={stopHoldAction}
-              onMouseLeave={stopHoldAction}
-              onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(0.045, 0))}
-              onTouchEnd={stopHoldAction}
-              title="Look Right"
-              style={iconBtnStyle}
-            >
-              <svg width={isSmallScreen ? "13" : "16"} height={isSmallScreen ? "13" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
+                {/* Pan Right [>] */}
+                <button
+                  className="krpano-btn"
+                  onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(0.045, 0))}
+                  onMouseUp={stopHoldAction}
+                  onMouseLeave={stopHoldAction}
+                  onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(0.045, 0))}
+                  onTouchEnd={stopHoldAction}
+                  title="Look Right"
+                  style={iconBtnStyle}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
 
-            {/* Tilt Up [^] */}
-            <button
-              onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(0, -0.038))}
-              onMouseUp={stopHoldAction}
-              onMouseLeave={stopHoldAction}
-              onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(0, -0.038))}
-              onTouchEnd={stopHoldAction}
-              title="Look Up"
-              style={iconBtnStyle}
-            >
-              <svg width={isSmallScreen ? "13" : "16"} height={isSmallScreen ? "13" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="18 15 12 9 6 15" />
-              </svg>
-            </button>
+                {/* Tilt Up [^] */}
+                <button
+                  className="krpano-btn"
+                  onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(0, -0.038))}
+                  onMouseUp={stopHoldAction}
+                  onMouseLeave={stopHoldAction}
+                  onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(0, -0.038))}
+                  onTouchEnd={stopHoldAction}
+                  title="Look Up"
+                  style={iconBtnStyle}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="18 15 12 9 6 15" />
+                  </svg>
+                </button>
 
-            {/* Tilt Down [v] */}
-            <button
-              onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(0, 0.038))}
-              onMouseUp={stopHoldAction}
-              onMouseLeave={stopHoldAction}
-              onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(0, 0.038))}
-              onTouchEnd={stopHoldAction}
-              title="Look Down"
-              style={iconBtnStyle}
-            >
-              <svg width={isSmallScreen ? "13" : "16"} height={isSmallScreen ? "13" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </button>
+                {/* Tilt Down [v] */}
+                <button
+                  className="krpano-btn"
+                  onMouseDown={() => startHoldAction(() => viewerRef?.current?.rotate(0, 0.038))}
+                  onMouseUp={stopHoldAction}
+                  onMouseLeave={stopHoldAction}
+                  onTouchStart={() => startHoldAction(() => viewerRef?.current?.rotate(0, 0.038))}
+                  onTouchEnd={stopHoldAction}
+                  title="Look Down"
+                  style={iconBtnStyle}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+              </>
+            )}
 
             {/* Zoom In [+] */}
             <button
+              className="krpano-btn"
               onClick={() => viewerRef?.current?.zoomIn()}
               title="Zoom In"
               style={iconBtnStyle}
             >
-              <svg width={isSmallScreen ? "14" : "18"} height={isSmallScreen ? "14" : "18"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
+              <svg width={isSmallScreen ? "15" : "18"} height={isSmallScreen ? "15" : "18"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
@@ -670,11 +695,12 @@ export default function KrpanoClassicSkin({
 
             {/* Zoom Out [-] */}
             <button
+              className="krpano-btn"
               onClick={() => viewerRef?.current?.zoomOut()}
               title="Zoom Out"
               style={iconBtnStyle}
             >
-              <svg width={isSmallScreen ? "14" : "18"} height={isSmallScreen ? "14" : "18"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
+              <svg width={isSmallScreen ? "15" : "18"} height={isSmallScreen ? "15" : "18"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </button>
@@ -682,6 +708,7 @@ export default function KrpanoClassicSkin({
             {/* ── GYROSCOPE BUTTON (📱 Device Motion / Tilt) ── */}
             {gyroSupported && (
               <button
+                className="krpano-btn"
                 onClick={handleToggleGyro}
                 title={gyroEnabled ? "Disable Gyroscope / Motion" : "Enable Gyroscope (Move device to look around)"}
                 style={{
@@ -712,6 +739,7 @@ export default function KrpanoClassicSkin({
 
             {/* ── MARKED VR ICON (WebXR / Virtual Reality Mode) ── */}
             <button
+              className="krpano-btn"
               onClick={handleTriggerVR}
               title="Enter VR Mode (Virtual Reality / Headset)"
               style={{
@@ -737,9 +765,10 @@ export default function KrpanoClassicSkin({
           </div>
 
           {/* Right Group: [Fullscreen] [Hide] [>>] */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: isUltraSmall ? '2px' : effectiveIsMobile ? '5px' : '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isUltraSmall ? '3px' : effectiveIsMobile ? '6px' : '10px', flexShrink: 0, minWidth: 0 }}>
             {/* Fullscreen Toggle */}
             <button
+              className="krpano-btn"
               onClick={onToggleFullscreen}
               title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
               style={iconBtnStyle}
@@ -751,6 +780,7 @@ export default function KrpanoClassicSkin({
 
             {/* Hide Full Dashboard Button */}
             <button
+              className="krpano-btn"
               onClick={() => setIsHidden(true)}
               title="Hide Full Dashboard"
               style={iconBtnStyle}
@@ -772,6 +802,7 @@ export default function KrpanoClassicSkin({
 
             {/* Next Scene Button [>>] */}
             <button
+              className="krpano-btn"
               onClick={goToNextScene}
               title="Next Scene"
               style={iconBtnStyle}
@@ -788,11 +819,12 @@ export default function KrpanoClassicSkin({
     {/* ── Restore Full Dashboard Button (Appears when dashboard is hidden) ── */}
     {isHidden && (
       <button
+        className="krpano-btn"
         onClick={() => setIsHidden(false)}
         title="Show Full Dashboard"
         style={{
           position: 'fixed',
-          bottom: effectiveIsMobile ? '8px' : '14px',
+          bottom: `calc(${effectiveIsMobile ? '8px' : '14px'} + env(safe-area-inset-bottom, 0px))`,
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 1001,
@@ -1025,7 +1057,7 @@ export default function KrpanoClassicSkin({
             overflowY: 'auto',
             maxHeight: effectiveIsMobile ? 'calc(92vh - 90px)' : 'calc(86vh - 84px)',
             display: 'grid',
-            gridTemplateColumns: isSmallScreen ? 'repeat(2, 1fr)' : effectiveIsMobile ? 'repeat(3, 1fr)' : 'repeat(auto-fill, minmax(180px, 1fr))',
+            gridTemplateColumns: isUltraSmall ? 'repeat(1, 1fr)' : effectiveIsMobile ? 'repeat(2, 1fr)' : isTablet ? 'repeat(3, 1fr)' : 'repeat(auto-fill, minmax(190px, 1fr))',
             gap: isSmallScreen ? '8px' : effectiveIsMobile ? '10px' : '14px'
           }}>
             {scenes.filter(sc => {
@@ -1095,6 +1127,8 @@ export default function KrpanoClassicSkin({
                         <img
                           src={thumbUrl}
                           alt={sceneName}
+                          loading="lazy"
+                          decoding="async"
                           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                           onError={(e) => {
                             if (sc.preview && e.currentTarget.src !== getImageUrl(sc.preview)) {
@@ -1167,12 +1201,17 @@ const iconBtnStyle = {
   border: 'none',
   color: '#ffffff',
   cursor: 'pointer',
-  padding: '2px',
+  padding: '3px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   outline: 'none',
   transition: 'transform 0.15s ease, color 0.15s ease',
   opacity: 0.95,
-  lineHeight: 1
+  lineHeight: 1,
+  boxSizing: 'border-box',
+  minWidth: 'unset',
+  minHeight: 'unset',
+  flexShrink: 0,
+  WebkitTapHighlightColor: 'transparent'
 };

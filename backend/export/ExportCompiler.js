@@ -3,6 +3,12 @@ const path = require('path');
 const os = require('os');
 const archiver = require('archiver');
 const { AppError, ValidationError } = require('../src/shared/errors/AppError');
+let ThumbnailService = null;
+try {
+  ThumbnailService = require('../src/modules/asset/thumbnail.service');
+} catch (e) {
+  console.warn('[ExportCompiler] ThumbnailService load notice:', e.message);
+}
 
 /**
  * Production-Grade Standalone Virtual Tour Exporter for 360TOOL.
@@ -58,6 +64,7 @@ class ExportCompiler {
       const mediaPromises = [];
       const assetManifest = [];
       const copiedFilenames = new Set();
+      const resolvedSourcePaths = new Map();
 
       /**
        * Process, validate, and localize a media asset.
@@ -130,6 +137,7 @@ class ExportCompiler {
         }
 
         if (sourcePath) {
+          resolvedSourcePaths.set(url, sourcePath);
           const filename = path.basename(sourcePath);
           const destPath = path.join(mediaDestDir, filename);
 
@@ -169,9 +177,55 @@ class ExportCompiler {
       if (exportedConfig.scenes && Array.isArray(exportedConfig.scenes)) {
         for (let i = 0; i < exportedConfig.scenes.length; i++) {
           const sc = exportedConfig.scenes[i];
+          const rawOriginalImage = sc.image;
           if (sc.image) sc.image = processAsset(sc.image, 'panorama', true);
-          if (sc.thumbnail) sc.thumbnail = processAsset(sc.thumbnail, 'thumbnail', false);
-          if (sc.preview) sc.preview = processAsset(sc.preview, 'preview', false);
+
+          const panoramaSourcePath = resolvedSourcePaths.get(rawOriginalImage);
+
+          // Guarantee fast thumbnail for every scene
+          if (sc.thumbnail) {
+            sc.thumbnail = processAsset(sc.thumbnail, 'thumbnail', false);
+          } else if (panoramaSourcePath) {
+            const ext = path.extname(panoramaSourcePath);
+            const base = path.basename(panoramaSourcePath, ext);
+            const dir = path.dirname(panoramaSourcePath);
+            const siblingThumb = path.join(dir, 'thumbnails', `${base}.thumb${ext}`);
+            if (fs.existsSync(siblingThumb)) {
+              sc.thumbnail = processAsset(siblingThumb, 'thumbnail', false);
+            } else if (ThumbnailService) {
+              try {
+                const generated = await ThumbnailService.generateThumbnail(panoramaSourcePath, tourId);
+                if (generated && generated.thumbnailDiskPath && fs.existsSync(generated.thumbnailDiskPath)) {
+                  sc.thumbnail = processAsset(generated.thumbnailDiskPath, 'thumbnail', false);
+                }
+              } catch (e) {
+                console.warn('[ExportCompiler] Non-blocking thumbnail generation notice:', e.message);
+              }
+            }
+          }
+
+          // Guarantee progressive 2-stage preview for instantaneous visual response
+          if (sc.preview) {
+            sc.preview = processAsset(sc.preview, 'preview', false);
+          } else if (panoramaSourcePath) {
+            const ext = path.extname(panoramaSourcePath);
+            const base = path.basename(panoramaSourcePath, ext);
+            const dir = path.dirname(panoramaSourcePath);
+            const siblingPrev = path.join(dir, 'previews', `${base}.preview${ext}`);
+            if (fs.existsSync(siblingPrev)) {
+              sc.preview = processAsset(siblingPrev, 'preview', false);
+            } else if (ThumbnailService) {
+              try {
+                const generated = await ThumbnailService.generatePreview(panoramaSourcePath, tourId);
+                if (generated && generated.previewDiskPath && fs.existsSync(generated.previewDiskPath)) {
+                  sc.preview = processAsset(generated.previewDiskPath, 'preview', false);
+                }
+              } catch (e) {
+                console.warn('[ExportCompiler] Non-blocking preview generation notice:', e.message);
+              }
+            }
+          }
+
           if (sc.ambientAudio) sc.ambientAudio = processAsset(sc.ambientAudio, 'audio', false);
           if (sc.narrationAudio) sc.narrationAudio = processAsset(sc.narrationAudio, 'audio', false);
 
@@ -256,11 +310,23 @@ class ExportCompiler {
         assets: assetManifest
       }, null, 2), 'utf8');
 
-      // 5. Inject config into the React index.html
+      // 5. Inject config and responsive mobile viewports into the React index.html
       const indexHtmlPath = path.join(stagingDir, 'index.html');
       if (fs.existsSync(indexHtmlPath)) {
         let htmlContent = fs.readFileSync(indexHtmlPath, 'utf8');
-        const injection = `<script>window.__TOUR_CONFIG__ = ${JSON.stringify(exportedConfig)};</script>`;
+
+        // Ensure modern responsive mobile viewport meta with viewport-fit=cover and no unexpected page-level zooming
+        const responsiveViewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />\n    <meta name="apple-mobile-web-app-capable" content="yes" />\n    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />\n    <meta name="mobile-web-app-capable" content="yes" />';
+        if (/<meta\s+name=["']viewport["'][^>]*>/i.test(htmlContent)) {
+          htmlContent = htmlContent.replace(/<meta\s+name=["']viewport["'][^>]*>/i, responsiveViewport);
+        } else if (htmlContent.includes('<head>')) {
+          htmlContent = htmlContent.replace('<head>', `<head>\n    ${responsiveViewport}`);
+        }
+
+        // Inject responsive mobile CSS reset to prevent iOS address-bar bouncing and ensure full-height edge-to-edge display
+        const responsiveResetCss = '<style>html,body,#root{width:100%;height:100%;height:100dvh;margin:0;padding:0;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-touch-callout:none;}</style>';
+
+        const injection = `${responsiveResetCss}\n<script>window.__TOUR_CONFIG__ = ${JSON.stringify(exportedConfig)};</script>`;
         
         if (htmlContent.includes('</head>')) {
           htmlContent = htmlContent.replace('</head>', `${injection}</head>`);

@@ -76,6 +76,7 @@ export class TextureManager {
         url,
         (texture) => {
           texture.colorSpace = THREE.SRGBColorSpace;
+          texture.generateMipmaps = false;
           texture.minFilter = THREE.LinearFilter;
           texture.magFilter = THREE.LinearFilter;
           texture.wrapS = THREE.RepeatWrapping;
@@ -198,8 +199,10 @@ export class TextureManager {
       .slice(0, maxCount); // Cap adjacent preload count
 
     linkedScenes.forEach((scene) => {
-      if (!scene.image) return;
-      const fullUrl = getImageUrl(scene.image);
+      // Prioritize preview texture for background preloading to minimize bandwidth and memory spikes
+      const preloadAsset = scene.preview || scene.image;
+      if (!preloadAsset) return;
+      const fullUrl = getImageUrl(preloadAsset);
       if (!fullUrl || this.cache.has(fullUrl) || this.pendingLoads.has(fullUrl)) return;
 
       // Deduplicated background load

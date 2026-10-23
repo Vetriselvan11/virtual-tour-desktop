@@ -66,12 +66,12 @@ class DeviceProfileManager {
       }
     } catch {}
 
-    // Classification heuristics
-    if (isMobile || cpuCores <= 4 || memoryGb <= 4 || isSoftwareOrIntegrated) {
+    // Classification heuristics: Only classify as LOW if hardware is truly constrained (software WebGL, <= 2 cores, or <= 2GB memory)
+    if (isSoftwareOrIntegrated || cpuCores <= 2 || memoryGb <= 2) {
       return PROFILE_LOW;
     }
 
-    if (cpuCores >= 8 && memoryGb >= 8) {
+    if (cpuCores >= 6 && memoryGb >= 6) {
       return PROFILE_HIGH;
     }
 
@@ -99,25 +99,26 @@ class DeviceProfileManager {
 
   /**
    * Maximum DPR allowed for WebGL canvas rendering.
-   * Prevents 4K screens on weak GPUs from rendering at 3.0+ DPR.
+   * High-DPI screens render sharp visuals without causing WebGL context loss.
    */
   get effectiveDpr() {
     const rawDpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1.0) : 1.0;
     const isStandalone = typeof window !== 'undefined' && !!window.__TOUR_CONFIG__;
 
     if (isStandalone) {
-      // In published exports, we prioritize visual quality. Allow up to 2.0 DPR for Retina/mobile displays.
+      // In published exports, prioritize visual quality up to 2.0 DPR.
       return Math.min(rawDpr, 2.0);
     }
 
     switch (this.profile) {
       case PROFILE_LOW:
-        return 1.0;
+        // Capping at 1.5 avoids severe blur on high-DPI budget phones while maintaining 60fps
+        return Math.min(rawDpr, 1.5);
       case PROFILE_MEDIUM:
-        return Math.min(rawDpr, 1.25);
+        return Math.min(rawDpr, 1.75);
       case PROFILE_HIGH:
       default:
-        return Math.min(rawDpr, 1.75);
+        return Math.min(rawDpr, 2.0);
     }
   }
 
@@ -166,9 +167,16 @@ class DeviceProfileManager {
     }
   }
 
+  get isMobile() {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 768 || (typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || ''));
+  }
+
   get shouldUpgradeMasterInEditor() {
-    // Always upgrade to Level 3 Master in both export and editor modes, 
-    // to ensure original quality is always visible.
+    // Only restrict master background upgrade if device is severely constrained (<= 1GB RAM)
+    if (this.profile === PROFILE_LOW && (typeof navigator !== 'undefined' && navigator.deviceMemory && navigator.deviceMemory <= 1)) {
+      return false;
+    }
     return true;
   }
 

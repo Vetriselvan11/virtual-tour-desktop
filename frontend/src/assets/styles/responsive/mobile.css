@@ -41,18 +41,30 @@ html, body {
     max-width: 100% !important;
   }
 
-  /* Scale buttons and touch zones for accessibility */
-  button, 
-  .ant-btn {
+  /* Scale standard action buttons for accessibility without breaking viewer icons */
+  .ant-btn:not(.krpano-btn):not(.viewer-btn) {
     height: auto !important;
     padding: 8px 12px;
     font-size: 12px !important;
-  }
-
-  /* Minimum tap target size (WCAG 2.5.5) */
-  button {
     min-width: 40px;
     min-height: 40px;
+  }
+
+  /* Krpano and Viewer UI Icon Buttons Isolation */
+  .krpano-skin {
+    position: fixed !important;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    max-width: calc(100vw - 12px) !important;
+  }
+
+  .krpano-skin button,
+  .krpano-btn,
+  .viewer-btn {
+    min-width: unset !important;
+    min-height: unset !important;
+    height: unset !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
   }
 
   /* Specific mobile-first scrollbar behaviors */

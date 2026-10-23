@@ -419,16 +419,27 @@ export default function ViewerPage() {
   }, []);
 
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => {
-        setIsFullscreen(true);
-      }).catch(err => {
-        console.error('Fullscreen request error:', err);
-      });
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      const el = document.documentElement;
+      const rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+      if (rfs) {
+        const p = rfs.call(el);
+        if (p && typeof p.then === 'function') {
+          p.then(() => setIsFullscreen(true)).catch(err => console.warn('Fullscreen notice:', err));
+        } else {
+          setIsFullscreen(true);
+        }
+      }
     } else {
-      document.exitFullscreen().then(() => {
-        setIsFullscreen(false);
-      });
+      const efs = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (efs) {
+        const p = efs.call(document);
+        if (p && typeof p.then === 'function') {
+          p.then(() => setIsFullscreen(false)).catch(() => {});
+        } else {
+          setIsFullscreen(false);
+        }
+      }
     }
   };
 
@@ -502,17 +513,18 @@ export default function ViewerPage() {
   return (
     <div
       style={{
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
+        height: '100dvh',
         overflow: 'hidden',
         background: '#050508',
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        inset: 0,
         fontFamily: "'DM Sans', sans-serif",
         touchAction: 'none',
+        overscrollBehavior: 'none',
+        WebkitUserSelect: 'none',
+        userSelect: 'none'
       }}
       onMouseMove={handleUserInteraction}
       onClick={handleUserInteraction}
@@ -554,7 +566,9 @@ export default function ViewerPage() {
       {/* Top Header UI */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0,
-        padding: isMobile ? '12px 14px' : '16px 28px',
+        padding: isMobile
+          ? 'calc(env(safe-area-inset-top, 0px) + 8px) calc(env(safe-area-inset-right, 0px) + 12px) 8px calc(env(safe-area-inset-left, 0px) + 12px)'
+          : '16px 28px',
         background: 'transparent',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         opacity: (effectiveShowUI && !isFullDashboardHidden) ? 1 : 0,
@@ -562,6 +576,8 @@ export default function ViewerPage() {
         pointerEvents: (effectiveShowUI && !isFullDashboardHidden) ? 'auto' : 'none',
         zIndex: 10,
         gap: 8,
+        maxWidth: '100%',
+        boxSizing: 'border-box'
       }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {tour.clientLogo && (

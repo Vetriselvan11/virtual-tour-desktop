@@ -330,6 +330,9 @@ const PanoramaViewer = forwardRef(function PanoramaViewer(
           height: '100%',
           cursor: hoveredHotspot ? 'pointer' : (editMode ? 'crosshair' : 'grab'),
           userSelect: 'none',
+          WebkitUserSelect: 'none',
+          WebkitTouchCallout: 'none',
+          touchAction: 'none',
         }}
       />
 

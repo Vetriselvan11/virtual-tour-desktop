@@ -32,14 +32,20 @@ export default class SceneManager {
     if (!sceneConf.image) return null;
 
     const img = sceneConf.image;
-    // Derive preview URL for standard /uploads/:tourId/:filename paths
-    if (img.includes('/uploads/') && !img.includes('/thumbnails/') && !img.includes('/previews/')) {
-      const ext = img.slice(img.lastIndexOf('.'));
-      const base = img.slice(0, img.lastIndexOf('.'));
-      const dir = base.slice(0, base.lastIndexOf('/') + 1);
-      const file = base.slice(base.lastIndexOf('/') + 1);
-      const previewRel = `${dir}previews/${file}.preview${ext}`;
-      return this.viewerCore.getImageUrl(previewRel);
+    // Derive preview URL for standard /uploads/:tourId/:filename paths or ./assets/media/ paths
+    if (!img.includes('/thumbnails/') && !img.includes('/previews/')) {
+      const lastDot = img.lastIndexOf('.');
+      if (lastDot > 0) {
+        const ext = img.slice(lastDot);
+        const base = img.slice(0, lastDot);
+        if (img.includes('/uploads/')) {
+          const dir = base.slice(0, base.lastIndexOf('/') + 1);
+          const file = base.slice(base.lastIndexOf('/') + 1);
+          return this.viewerCore.getImageUrl(`${dir}previews/${file}.preview${ext}`);
+        } else {
+          return this.viewerCore.getImageUrl(`${base}.preview${ext}`);
+        }
+      }
     }
 
     return this.viewerCore.getImageUrl(img);
@@ -65,27 +71,23 @@ export default class SceneManager {
     this.isTransitioning = true;
     this.currentSceneId = sceneConf.id;
 
-    // Reset camera FOV and Pitch/Yaw angles to scene's starting orientation
-    if (this.viewerCore) {
-      let defaultFov = sceneConf.fov !== undefined ? parseFloat(sceneConf.fov) : 80;
-      if (isNaN(defaultFov)) defaultFov = 80;
-      if (defaultFov > 110 && this.viewerCore._calculateVFovFromMFov) {
-        defaultFov = this.viewerCore._calculateVFovFromMFov(defaultFov, this.viewerCore.camera?.aspect || 1.777);
-      }
-      defaultFov = Math.max(35, Math.min(95, defaultFov));
-
-      let initialYaw = (sceneConf.initialYaw !== undefined && sceneConf.initialYaw !== null)
-        ? parseFloat(sceneConf.initialYaw)
-        : (this.viewerCore.targetTheta || 0);
-      if (isNaN(initialYaw)) initialYaw = this.viewerCore.targetTheta || 0;
-
-      let initialPitch = (sceneConf.initialPitch !== undefined && sceneConf.initialPitch !== null)
-        ? parseFloat(sceneConf.initialPitch)
-        : 0;
-      if (isNaN(initialPitch)) initialPitch = 0;
-
-      this.viewerCore.setCameraOrientation(initialYaw, initialPitch, defaultFov);
+    // Resolve target camera FOV and Pitch/Yaw angles
+    let defaultFov = sceneConf.fov !== undefined ? parseFloat(sceneConf.fov) : 80;
+    if (isNaN(defaultFov)) defaultFov = 80;
+    if (defaultFov > 110 && this.viewerCore._calculateVFovFromMFov) {
+      defaultFov = this.viewerCore._calculateVFovFromMFov(defaultFov, this.viewerCore.camera?.aspect || 1.777);
     }
+    defaultFov = Math.max(35, Math.min(95, defaultFov));
+
+    let initialYaw = (sceneConf.initialYaw !== undefined && sceneConf.initialYaw !== null)
+      ? parseFloat(sceneConf.initialYaw)
+      : (this.viewerCore.targetTheta || 0);
+    if (isNaN(initialYaw)) initialYaw = this.viewerCore.targetTheta || 0;
+
+    let initialPitch = (sceneConf.initialPitch !== undefined && sceneConf.initialPitch !== null)
+      ? parseFloat(sceneConf.initialPitch)
+      : 0;
+    if (isNaN(initialPitch)) initialPitch = 0;
 
     const sphere = this.viewerCore.sphere;
     const masterUrl = sceneConf.image ? this.viewerCore.getImageUrl(sceneConf.image) : null;
@@ -104,112 +106,154 @@ export default class SceneManager {
     if (initialLoadUrl) this.textureManager.setTransitioning(initialLoadUrl, true);
     if (masterUrl && masterUrl !== initialLoadUrl) this.textureManager.setTransitioning(masterUrl, true);
 
-    let transitionDur = sceneConf.transitionDuration !== undefined ? parseFloat(sceneConf.transitionDuration) : 0.35;
-    if (isNaN(transitionDur)) transitionDur = 0.35;
+    let transitionDur = sceneConf.transitionDuration !== undefined ? parseFloat(sceneConf.transitionDuration) : 0.4;
+    if (isNaN(transitionDur)) transitionDur = 0.4;
     const effect = sceneConf.transitionEffect || 'fade';
+    const isInstant = transitionDur <= 0.05 || effect === 'instant';
 
-    // ── STAGE 1: Fast initial texture presentation ───────────────────────────
+    const finalizeTransition = () => {
+      if (this._loadRequestId !== requestId) return;
+      this.isTransitioning = false;
+      if (oldUrl) this.textureManager.setTransitioning(oldUrl, false);
+      this.textureManager.setTransitioning(initialLoadUrl, false);
+      this.viewerCore.renderLoop.requestRender(3);
+
+      // ── STAGE 2: Multi-Resolution Tiled Streaming OR Master Upgrade ──
+      if (isElectronRuntime && sceneConf.tiles && sceneConf.tiles.enabled) {
+        if (this.viewerCore.tileManager) {
+          this.viewerCore.tileManager.setScene(sceneConf.tiles, sceneConf.id);
+        }
+        if (masterUrl) this.textureManager.setTransitioning(masterUrl, false);
+      } else {
+        if (this.viewerCore.tileManager) {
+          this.viewerCore.tileManager.setScene(null, sceneConf.id);
+        }
+        if (
+          (!this.viewerCore.editMode || DeviceProfile.shouldUpgradeMasterInEditor) &&
+          masterUrl &&
+          masterUrl !== initialLoadUrl
+        ) {
+          this._queueMasterUpgrade(masterUrl, requestId, sphere);
+        } else {
+          if (masterUrl) this.textureManager.setTransitioning(masterUrl, false);
+        }
+      }
+
+      if (onComplete) onComplete();
+    };
+
+    // Case A: Instant transition OR initial scene load (no prior scene to fade out)
+    if (isInstant || !oldUrl) {
+      this.viewerCore.setCameraOrientation(initialYaw, initialPitch, defaultFov);
+      if (this.transitionManager) this.transitionManager.cancelActive(sphere);
+
+      this.textureManager.loadTexture(
+        initialLoadUrl,
+        (texture) => {
+          if (this._loadRequestId !== requestId) return;
+          if (this.viewerCore.renderer && this.viewerCore.renderer.initTexture) {
+            try { this.viewerCore.renderer.initTexture(texture); } catch (e) {}
+          }
+          if (sphere && sphere.material) {
+            sphere.material.map = texture;
+            sphere.material.color.set(0xffffff);
+            sphere.material.needsUpdate = true;
+          }
+          this.textureManager.setActive(initialLoadUrl);
+          this.hotspotManager.rebuild(hotspotsList || [], selectedHotspotId);
+          if (this.viewerCore.object3dManager) {
+            this.viewerCore.object3dManager.rebuild(sceneConf.objects3d || sceneConf.objects || [], selectedHotspotId);
+          }
+
+          if (isInstant) {
+            if (sphere && sphere.material) sphere.material.opacity = 1;
+            finalizeTransition();
+          } else {
+            if (sphere && sphere.material) sphere.material.opacity = 0;
+            const fadeInDur = Math.max(0.25, transitionDur * 0.6);
+            this.transitionManager.fade(sphere, 1, fadeInDur, finalizeTransition);
+          }
+        },
+        (err) => {
+          this._handleLoadError(requestId, oldUrl, initialLoadUrl, masterUrl, sphere, onComplete);
+        }
+      ).catch(() => {});
+      return;
+    }
+
+    // Case B: Navigating between scenes -> Seamless Two-Stage Fade-Out / Fade-In Transition
+    const fadeOutDur = Math.max(0.18, transitionDur * 0.45);
+    const fadeInDur = Math.max(0.22, transitionDur * 0.55);
+
+    let fadeOutDone = false;
+    let loadedTexture = null;
+
+    if (this.transitionManager) {
+      this.transitionManager.cancelActive(sphere);
+    }
+
+    // Hide active hotspots during fade-out to prevent lingering floating icons
+    if (this.viewerCore.hotspotManager?.renderer) {
+      this.viewerCore.hotspotManager.renderer.meshes.forEach((m) => {
+        if (m.sprite) m.sprite.visible = false;
+        if (m.ring) m.ring.visible = false;
+      });
+    }
+
+    const tryApplySceneSwitch = () => {
+      if (!fadeOutDone || !loadedTexture || this._loadRequestId !== requestId) return;
+
+      // 1. Scene is at opacity 0 (total darkness) -> orient camera invisibly without any visual jump
+      this.viewerCore.setCameraOrientation(initialYaw, initialPitch, defaultFov);
+
+      // 2. Pre-upload new texture to GPU VRAM
+      if (this.viewerCore.renderer && this.viewerCore.renderer.initTexture) {
+        try { this.viewerCore.renderer.initTexture(loadedTexture); } catch (e) {}
+      }
+
+      // 3. Swap texture
+      if (sphere && sphere.material) {
+        sphere.material.map = loadedTexture;
+        sphere.material.color.set(0xffffff);
+        sphere.material.needsUpdate = true;
+      }
+      this.textureManager.setActive(initialLoadUrl);
+
+      // 4. Rebuild hotspots and 3D objects for the new scene
+      this.hotspotManager.rebuild(hotspotsList || [], selectedHotspotId);
+      if (this.viewerCore.object3dManager) {
+        this.viewerCore.object3dManager.rebuild(sceneConf.objects3d || sceneConf.objects || [], selectedHotspotId);
+      }
+
+      // 5. Smoothly Fade In from 0 to 1
+      this.transitionManager.fade(sphere, 1, fadeInDur, finalizeTransition);
+    };
+
+    // Stage 1a: Start smooth fade out of current scene to black
+    this.transitionManager.fade(sphere, 0, fadeOutDur, () => {
+      if (this._loadRequestId !== requestId) return;
+      fadeOutDone = true;
+      tryApplySceneSwitch();
+    });
+
+    // Stage 1b: Concurrently load new texture
     this.textureManager.loadTexture(
       initialLoadUrl,
       (texture) => {
-        // Drop out-of-order stale responses
-        if (this._loadRequestId !== requestId) {
-          if (oldUrl) this.textureManager.setTransitioning(oldUrl, false);
-          this.textureManager.setTransitioning(initialLoadUrl, false);
-          if (masterUrl) this.textureManager.setTransitioning(masterUrl, false);
-          return;
-        }
-
-        // Pre-upload texture to GPU VRAM so render presentation doesn't hitch
-        if (this.viewerCore.renderer && this.viewerCore.renderer.initTexture) {
-          try {
-            this.viewerCore.renderer.initTexture(texture);
-          } catch (e) {}
-        }
-
-        // Cancel previous in-flight transition
-        if (this.transitionManager && this.transitionManager.cancelActive) {
-          this.transitionManager.cancelActive(sphere);
-        }
-
-        // Atomically swap texture
-        if (sphere && sphere.material) {
-          sphere.material.map = texture;
-          sphere.material.color.set(0xffffff);
-          sphere.material.needsUpdate = true;
-        }
-
-        this.textureManager.setActive(initialLoadUrl);
-
-        // Clear and redraw hotspots inside WebGL scene
-        this.hotspotManager.rebuild(hotspotsList || [], selectedHotspotId);
-
-        // Rebuild 3D interactive objects inside WebGL scene
-        if (this.viewerCore.object3dManager) {
-          this.viewerCore.object3dManager.rebuild(sceneConf.objects3d || sceneConf.objects || [], selectedHotspotId);
-        }
-
-        const finalizeTransition = () => {
-          if (this._loadRequestId === requestId) {
-            this.isTransitioning = false;
-            if (oldUrl) this.textureManager.setTransitioning(oldUrl, false);
-            this.textureManager.setTransitioning(initialLoadUrl, false);
-            this.viewerCore.renderLoop.requestRender(3);
-
-            // ── STAGE 2: Multi-Resolution Tiled Streaming OR Master Upgrade ──
-            if (isElectronRuntime && sceneConf.tiles && sceneConf.tiles.enabled) {
-              if (this.viewerCore.tileManager) {
-                this.viewerCore.tileManager.setScene(sceneConf.tiles, sceneConf.id);
-              }
-              if (masterUrl) this.textureManager.setTransitioning(masterUrl, false);
-            } else {
-              if (this.viewerCore.tileManager) {
-                this.viewerCore.tileManager.setScene(null, sceneConf.id);
-              }
-              if (
-                DeviceProfile.shouldUpgradeMasterInEditor &&
-                masterUrl &&
-                masterUrl !== initialLoadUrl
-              ) {
-                this._queueMasterUpgrade(masterUrl, requestId, sphere);
-              } else {
-                if (masterUrl) this.textureManager.setTransitioning(masterUrl, false);
-              }
-            }
-
-            if (onComplete) onComplete();
-          }
-        };
-
-        if (transitionDur <= 0.05 || effect === 'instant') {
-          if (sphere && sphere.material) sphere.material.opacity = 1;
-          finalizeTransition();
-        } else {
-          // Smooth seamless fade presentation without jarring dark dip
-          if (sphere && sphere.material) sphere.material.opacity = 0.85;
-          this.transitionManager.fade(sphere, 1, transitionDur, finalizeTransition);
-        }
+        if (this._loadRequestId !== requestId) return;
+        loadedTexture = texture;
+        tryApplySceneSwitch();
       },
       (err) => {
-        // If preview failed, try fallback directly to master URL
+        // Fallback to master URL if preview fails
         if (initialLoadUrl !== masterUrl && masterUrl && this._loadRequestId === requestId) {
           console.warn('Preview load failed, falling back to master image:', err.message);
           this.textureManager.loadTexture(
             masterUrl,
             (masterTex) => {
               if (this._loadRequestId !== requestId) return;
-              if (sphere && sphere.material) {
-                sphere.material.map = masterTex;
-                sphere.material.color.set(0xffffff);
-                sphere.material.needsUpdate = true;
-              }
-              this.textureManager.setActive(masterUrl);
-              this.hotspotManager.rebuild(hotspotsList || [], selectedHotspotId);
-              this.isTransitioning = false;
-              if (oldUrl) this.textureManager.setTransitioning(oldUrl, false);
-              this.textureManager.setTransitioning(masterUrl, false);
-              this.viewerCore.renderLoop.requestRender(3);
-              if (onComplete) onComplete();
+              loadedTexture = masterTex;
+              tryApplySceneSwitch();
             },
             () => {
               this._handleLoadError(requestId, oldUrl, initialLoadUrl, masterUrl, sphere, onComplete);
@@ -217,7 +261,6 @@ export default class SceneManager {
           ).catch(() => {});
           return;
         }
-
         this._handleLoadError(requestId, oldUrl, initialLoadUrl, masterUrl, sphere, onComplete);
       }
     ).catch(() => {});
